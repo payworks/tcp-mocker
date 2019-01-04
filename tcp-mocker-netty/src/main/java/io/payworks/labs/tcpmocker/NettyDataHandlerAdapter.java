@@ -88,12 +88,18 @@ public class NettyDataHandlerAdapter extends ChannelInboundHandlerAdapter {
     }
 
     private void writeBytes(ChannelHandlerContext ctx) {
-        ctx.write(writeBuf)
-                .addListener(f -> {
-                    if (!f.isSuccess()) {
-                        logger.error("Unexpected Error!", f.cause());
-                    }
-                });
-        writeBuf = null;
+        if (writeBuf.writerIndex() == 0) {
+            writeBuf = null;
+            ctx.close();
+        }
+        else {
+            ctx.write(writeBuf)
+                    .addListener(f -> {
+                        if (!f.isSuccess()) {
+                            logger.error("Unexpected Error!", f.cause());
+                        }
+                    });
+            writeBuf = null;
+        }
     }
 }

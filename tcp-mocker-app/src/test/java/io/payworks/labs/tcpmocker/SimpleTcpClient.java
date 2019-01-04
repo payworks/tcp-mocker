@@ -28,7 +28,9 @@ class SimpleTcpClient implements AutoCloseable {
         final int len = socket.getInputStream().read(buf);
 
         final ByteArrayOutputStream result = new ByteArrayOutputStream();
-        result.write(buf, 0, len);
+        if (len > 0) {
+            result.write(buf, 0, len);
+        }
 
         return result.toByteArray();
     }

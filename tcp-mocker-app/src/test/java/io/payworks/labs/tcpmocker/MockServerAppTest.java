@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -83,6 +84,15 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
                         RecordingData::getReply)
                 .contains(
                         tuple(REQUEST_PAYLOAD, REPLY_PAYLOAD));
+    }
+
+    @Test()
+    public void canReturnEmptyReply() throws IOException {
+        String reply = base16().encode(
+                tcpClient.sendAndReceive(
+                        base16().decode("70696E6800")));
+
+        assertThat(reply).isEmpty();
     }
 
     private ResponseEntity<RecordingData> whenQueryingForLastRecording() {
