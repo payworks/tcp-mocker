@@ -9,7 +9,7 @@ services:
 - docker
 
 script:
-  - "./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}"
+  - "./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}.RELEASE"
   - "./mvnw -DskipTests -e verify -B"
 
 env:
