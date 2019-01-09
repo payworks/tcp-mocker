@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 
 # Decrypt signing key
 openssl aes-256-cbc -K $encrypted_a3a4db86818a_key -iv $encrypted_a3a4db86818a_iv
@@ -6,4 +6,4 @@ openssl aes-256-cbc -K $encrypted_a3a4db86818a_key -iv $encrypted_a3a4db86818a_i
   -d
 
 # Import signing key
- gpg --fast-import ~\/temp/tcp-mocker-keys/payworks_sign_key.asc
+gpg --fast-import ~\/temp/tcp-mocker-keys/payworks_sign_key.asc
