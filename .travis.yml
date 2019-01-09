@@ -8,7 +8,7 @@ jdk:
 services:
 - docker
 
-script: "./mvnw -e verify -B"
+script: "./mvnw -e verify -B -DskipTests"
 
 env:
   global:
