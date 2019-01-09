@@ -9,7 +9,7 @@ services:
 - docker
 
 script:
-  - export BUILD_BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == \"false\" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi | sed -r s/[\\/:\"\<\>\|?*]/-/g)
+  - export BUILD_BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi | sed -r s/[\\/:\"\<\>\|?*]/-/g)
   - ./mvnw versions:set -DnewVersion=$BUILD_BRANCH-SNAPSHOT
   - if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then ./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}.RELEASE; fi
   - ./continuous-deployment/before-deploy.sh
