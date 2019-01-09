@@ -7,6 +7,30 @@
     <version>LOCAL-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>payworks/labs/tcp-mocker/parent</name>
+    <description>Library for mocking any TCP based protocol</description>
+    <url>https://github.com/payworks/tcp-mocker</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>andreysaksonov</id>
+            <name>Andrey Saksonov</name>
+            <email>andrey.saksonov@payworks.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
+        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/payworks/tcp-mocker</url>
+    </scm>
 
     <modules>
         <module>tcp-mocker-app</module>
@@ -19,13 +43,6 @@
         <module>tcp-mocker-interface</module>
         <module>tcp-mocker-service</module>
     </modules>
-
-    <scm>
-        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
-        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/payworks/tcp-mocker</url>
-    </scm>
 
     <distributionManagement>
         <repository>
@@ -64,6 +81,7 @@
         <maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <guava-beta-checker.version>1.0</guava-beta-checker.version>
@@ -397,6 +415,21 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
+                        <phase>deploy</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>deploy</phase>
                     </execution>
                 </executions>
             </plugin>
