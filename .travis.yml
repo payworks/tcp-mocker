@@ -9,8 +9,11 @@ services:
 - docker
 
 script:
-  - "./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}.RELEASE"
-  - "./mvnw -DskipTests -e verify -B"
+  - "export BUILD_BRANCH=$(if [ \"$TRAVIS_PULL_REQUEST\" == \"false\" ]; then echo $TRAVIS_BRANCH; else echo $TRAVIS_PULL_REQUEST_BRANCH; fi)"
+  - "./mvnw versions:set -DnewVersion=$BUILD_BRANCH-SNAPSHOT"
+  - "if [ \"$TRAVIS_BRANCH\" = 'master' ] && [ \"$TRAVIS_PULL_REQUEST\" == 'false' ]; then ./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}.RELEASE; fi"
+  - ./continuous-deployment/before-deploy.sh
+  - "./mvnw --settings continuous-deployment/mvnsettings.xml -e deploy -B"
 
 env:
   global:
@@ -18,7 +21,3 @@ env:
   - secure: ir+yE9CTmcsv/n3XUur2FZcItk5eB+nLnfa+zm0s4WgOxYiwBWZRo2pPx6wlh5hdEDVbiQzMuHQ30CmNsuPm7WhyKo3oUPOqt1w1bi5GwtxESan2lFGFV0odBgDc5pGK+qX2ehOMCQOV/vRs7vLe5w9svHV3AGGAGNe1mq7qlcLa6UWkPCxuxeuQglQew4W9Gp5XrDRR35zGOjFyoVaWWmzoq6PMQO4m4VK1t2EgYTHPgkF10v4WTPjtnlxbbCR302tZvpq/oo1bVYxUq9pWWtsF2IKNclEAK1qH5hDxldxSO8oSBkRklsb1CdOciU+TzweV7pb35lmEfzOvLzkas/5gebwyqZ3+26Kzz3sUK+UeSjXFwcGCpmSAmCSli8/r+z9DTRfiMlC+BRCNHwVnOraTOukge3FeR25JXZPhbZB33n0W0VMiRNnI3pfnuSeSFOuFUM5xkbBlGOEnH++xzWFeojzdLNNt7ygTBQ7dtfbtz7r3bQL07t51APxFPxTflQT3YAdT6FvlPD0fIDchYnFqMxuacduPH87qnDv9t8z64ma/oVw1ZMPDY7WMyzOREPjp+gBHufhcY3O0bOcBGlhund28qSRZFZOdCwkwz95gndZNqIXrtbZyXKhQRLePftAwHi1dx+tTg6LqTjTuQBC1GiX05n1bsCRANNbdo2s=
   - secure: WCJTXMEltNceaHNM93NmWlwjWLe2fGBjD38D5py84hEmvBDTPWQEed8pdtqDaoLEz9brBbmzlTNF2rjnv5acDAbqnC1Ly6bUbzWYqL95NGif4HDRe9c8bBVelvGabEQM+oqv3Ym4XWe62Kflp1+MurMKBTIG6csKzjUe9ebk/2NIj9otlWZq/mnmKy1ENya95WMt8p7zuSmkN/vn4QQXjqq5Lu5+Ct4sH37oBaad1TZf7azbM9DFb3p6iv97iGrnVdHZwzTE+F13HFy+uwKamZJ4NxyetvzuignemXkwgj1F1HkiPSBq9RLKqfaInC6LHjICpxn1M2fmbx+Dz1Sba4FPsXdLi+/hGJvrtw1LoGUH7s8huoGgADOkmfPXLssCuESwtDvGlGqpHi8rBzMEGDZnpJYdqpPmdDKZ0iNBbXSFQ7NYdk5rUzd0QPHSZtHTXlOyqJiF1a6qLev39EC2ga4S/XmCjKF3r6O7NzzjXvg3+Fns2eb6CkuRAJwOfNUSKRscgVcVPMiXKs+VWCbJH0tuk9bl6wL3EMmtgvTEuWBTGlDxwo6SPwgH0nepb6+ohaENKLBxPaVdlumqqJaFpjISLV2cB5OW/AY0Ci5fYJdizthyK+wYjlNiM5FvXFdyNFwXeSfEXf2jY1nRfw3bT9mNz+f3bMLNFtzgw6H1UpY=
   - secure: GNFGYkm9Ew1ouJXZ3ejaIOL8J/ek9J5Vyi0KqGzqFQlXxPE3OU60Bil4uZSscgzTJrUtjO8B2cGdFOYs7e2XtMve2KiU/blTtNpD70q0o47CaXEFmrTq/h7vDPI93P3yW1ZogrxWAp2TwTSDTL5gvNLRGZm46uJeXZXanh2W+K71uYhJ1CWwodnYNHyD8yufNhXtJFz/tPAJLJErl3IvwSPnkriqucfBFmyodHh7UZCOmJcgZwgs4RxIqSc68gNVMbIvYotNZSCB3O8Cy9huRSYCdgrRmtEr0PQGasJpSu3DNU4rgk79lBGcv15Dp/Ez7PwIoKezMIL7rrDZVOkl6S5t75A/fw47GjgxPPGVby1An0ikHbWwm96faYMi47YAOulgFC7dqB3Z6ht9lTSCgFZ15Prl1trQHh/oiuLBP7KLCO9WKSfwKbhihyL5wurbkaCmVTlmsPtbngQHIJh96lPrWBpOCiaYXaH5KIOLwyzeJuIp38Nhpv99B7NqZoJHyH/yoIUKcHeqrfdTO/aARd6xvji/BH0Hih02FIEjfd9NmcXwjMn9ZZJA2zJPKCh4KBRwOjnGMUGL1DyfC1KdmRGUW7U+pDUuxJx4TphquDIrMFSA8hkTKdg3VcEvn/NuMKZHrPLT9afKGZw2b/3KRpKlv+rStprmXAb9U5Og8hY=
-
-after_success:
-  - ./continuous-deployment/before-deploy.sh
-  - ./continuous-deployment/deploy.sh
