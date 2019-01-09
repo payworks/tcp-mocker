@@ -8,7 +8,9 @@ jdk:
 services:
 - docker
 
-script: "./mvnw -DskipTests -e verify -B"
+script:
+  - "./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}"
+  - "./mvnw -DskipTests -e verify -B"
 
 env:
   global:

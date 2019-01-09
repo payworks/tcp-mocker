@@ -413,9 +413,10 @@
                     <execution>
                         <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
                         </goals>
-                        <phase>deploy</phase>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -429,7 +430,7 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <phase>deploy</phase>
+                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
