@@ -23,6 +23,36 @@
             <name>Andrey Saksonov</name>
             <email>andrey.saksonov@payworks.com</email>
         </developer>
+        <developer>
+            <id>dmalch</id>
+            <name>Dmitry Malchikov</name>
+            <email>dmitry.malchikov@payworks.com</email>
+        </developer>
+        <developer>
+            <id>enrique-alonso-martin-pw</id>
+            <name>Enrique Alonso-Martin</name>
+            <email>enrique.alonso-martin@payworks.com</email>
+        </developer>
+        <developer>
+            <id>aComanche</id>
+            <name>Miguel Hernández</name>
+            <email>miguel.hernandez@payworks.com</email>
+        </developer>
+        <developer>
+            <id>pawelreal</id>
+            <name>Pawel Wozniak</name>
+            <email>pawel.wozniak@payworks.com</email>
+        </developer>
+        <developer>
+            <id>gitmik</id>
+            <name>Mikolaj Sosna</name>
+            <email>mikolaj.sosna@payworks.com</email>
+        </developer>
+        <developer>
+            <id>quarksplitter</id>
+            <name>Matej Risek</name>
+            <email>matej.risek@payworks.com</email>
+        </developer>
     </developers>
 
     <scm>
