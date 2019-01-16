@@ -12,7 +12,7 @@ script:
 - if [ "$TRAVIS_BRANCH" = 'master' ] && [ "$TRAVIS_PULL_REQUEST" == 'false' ]; then
   ./mvnw versions:set -DnewVersion=1.0.${TRAVIS_BUILD_NUMBER}.RELEASE; fi
 - "./continuous-deployment/before-deploy.sh"
-- "./mvnw --settings continuous-deployment/mvnsettings.xml -e deploy -B"
+- "./mvnw -P sign,build-extras --settings continuous-deployment/mvnsettings.xml -e deploy -B"
 env:
   global:
   - secure: YVy+wyRM44E4UjqXmK9IJy7rfDHf2dlFDdxID5L70ANqUoVr35MTOoeatsjeRgIVK6keArlfcay38Bs5vYyNI//m0GA+XunP0cy4+/quIQhWVMshVnlTf4PHxSh/qSgAdSOAEzL21I7gzsHD8GScc+ef+R/qi/6CCtT2Os72o7OPLd+m2F3cuwEQlLYFUVPVMvSpNsK7s9nIoL96aKahPOLt0myOZYFC031YxIdAJZTnGmIyh2iueAAa38iEI4uy7ghYUacpTFx8DlbrsA4tJoZ2AJUcSG81DwI8cCp13e7lzZ4vDQwdG6pV7G93FWJsmS2oOcLzL46BJHSrH2ZLXMSCkoeqTZ8KsANPIiOqvUvuB3Xbx8SV2HiodreDsan19t2ajTp1Xcp23kASvQVJWCzlBwzpeioy7TqLpUpKggcyrnRn0rQIdsXApYTtxB/YroNIeQtDGSbUOzxS57hi2rEr3v/fVi5nHZnpsi6fwE5gJa/nHBGQeAxFC47RMGU2hmWA0CgE1CG8BGPmIp03G4GOcn9/76s/XNzU0UP5O4gFWY+XKgPxq66xs/cApFR5iVImoHYlocf/WYC64ov5AUuXtDEBGXoSUvbIdgVJab2ZwmauZ088VQPlHF5PFOleJPi+g1O0OxAB8M6JmJIlKBjmTqCcSZcZdiO6iryXwVY=
