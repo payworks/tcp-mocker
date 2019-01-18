@@ -36,7 +36,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    <!-- Disabled as Travis docker fails to run the container and it is not related to this change -->
+    <!--
     <build>
         <plugins>
             <plugin>
@@ -45,4 +46,5 @@
             </plugin>
         </plugins>
     </build>
+    -->
 </project>
