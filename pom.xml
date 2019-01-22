@@ -90,6 +90,7 @@
         <!-- Maven -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
         <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -406,6 +407,7 @@
                     <version>${spotify-dockerfile-maven-plugin.version}</version>
                     <configuration>
                         <repository>tcpmocker/${project.artifactId}</repository>
+                        <skipPush>${maven.deploy.skip}</skipPush>
                         <tag>${project.version}</tag>
                         <buildArgs>
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>

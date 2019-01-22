@@ -44,5 +44,14 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/version.txt</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>
