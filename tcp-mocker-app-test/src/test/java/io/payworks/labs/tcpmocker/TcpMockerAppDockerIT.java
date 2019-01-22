@@ -20,7 +20,9 @@ public class TcpMockerAppDockerIT {
             new DockerComposeContainer(new File("tcp-mocker-app/docker-compose.yml"))
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT)
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, WEB_SERVICE_PORT)
-                    .withEnv("TCP_MOCKER_APP_TAG", System.getenv("PROJECT_VERSION"));
+                    .withEnv("TCP_MOCKER_APP_TAG", System.getenv("PROJECT_VERSION"))
+                    .withLocalCompose(true)
+                    .withPull(false);
 
     private SimpleTcpClient tcpClient;
 
