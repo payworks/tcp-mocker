@@ -19,7 +19,7 @@
 
     <profiles>
         <profile>
-            <id>ossrh</id>
+            <id>gpg-setup</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>

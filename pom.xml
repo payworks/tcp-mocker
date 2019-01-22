@@ -55,14 +55,12 @@
             <email>matej.risek@payworks.com</email>
         </developer>
     </developers>
-
     <scm>
         <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
         <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
         <tag>HEAD</tag>
         <url>https://github.com/payworks/tcp-mocker</url>
     </scm>
-
     <modules>
         <module>tcp-mocker-app</module>
         <module>tcp-mocker-app-test</module>
@@ -376,20 +374,6 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                            <phase>verify</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
@@ -450,7 +434,6 @@
                             <goal>jar-no-fork</goal>
                             <goal>test-jar-no-fork</goal>
                         </goals>
-                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -464,7 +447,6 @@
                         <goals>
                             <goal>jar</goal>
                         </goals>
-                        <phase>verify</phase>
                     </execution>
                 </executions>
             </plugin>
@@ -517,6 +499,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
 </project>
