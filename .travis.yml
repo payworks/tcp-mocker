@@ -23,6 +23,9 @@ script:
 
   export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
   export MAVEN_DEPLOY_SKIP
+  echo $PROJECT_VERSION
+  echo $MAVEN_DEPLOY_SKIP
+
 - "./mvnw versions:set -DnewVersion=${PROJECT_VERSION}"
 - "./continuous-deployment/before-deploy.sh"
 - "./mvnw -Dmaven.deploy.skip=${MAVEN_DEPLOY_SKIP} --settings continuous-deployment/mvnsettings.xml -e deploy -B"

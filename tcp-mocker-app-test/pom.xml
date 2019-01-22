@@ -42,16 +42,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <environmentVariables>
+                        <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
+                    </environmentVariables>
+                </configuration>
             </plugin>
         </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-                <includes>
-                    <include>**/version.txt</include>
-                </includes>
-            </resource>
-        </resources>
     </build>
 </project>
