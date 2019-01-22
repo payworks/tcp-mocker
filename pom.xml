@@ -412,6 +412,7 @@
                         <buildArgs>
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                         </buildArgs>
+                        <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                     </configuration>
                     <executions>
                         <execution>
