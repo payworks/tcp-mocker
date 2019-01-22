@@ -6,7 +6,7 @@ jdk:
 services:
 - docker
 script:
-- docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+- echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 - export BUILD_BRANCH=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then echo $TRAVIS_BRANCH;
   else echo $TRAVIS_PULL_REQUEST_BRANCH; fi | sed -r s/[\\/:\"\<\>\|?*]/-/g)
 - "./mvnw versions:set -DnewVersion=$BUILD_BRANCH-SNAPSHOT"
