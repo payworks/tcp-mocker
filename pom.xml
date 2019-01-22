@@ -405,7 +405,7 @@
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>${spotify-dockerfile-maven-plugin.version}</version>
                     <configuration>
-                        <repository>${project.artifactId}</repository>
+                        <repository>tcpmocker/${project.artifactId}</repository>
                         <tag>${project.version}</tag>
                         <buildArgs>
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
