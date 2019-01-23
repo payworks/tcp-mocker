@@ -4,6 +4,7 @@ import org.testcontainers.containers.DockerComposeContainer;
 import org.testng.annotations.*;
 
 import java.io.File;
+import java.util.Optional;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -16,11 +17,14 @@ public class TcpMockerAppDockerIT {
     private static final int TCP_SERVICE_PORT = 10001;
     private static final int WEB_SERVICE_PORT = 8080;
 
+    private static final String TCP_MOCKER_APP_CONTAINER_TAG = Optional.ofNullable(System.getenv("PROJECT_VERSION"))
+            .orElse("LOCAL-SNAPSHOT");
+
     private static final DockerComposeContainer tcpMocker =
             new DockerComposeContainer(new File("tcp-mocker-app/docker-compose.yml"))
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT)
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, WEB_SERVICE_PORT)
-                    .withEnv("TCP_MOCKER_APP_TAG", System.getenv("PROJECT_VERSION"))
+                    .withEnv("TCP_MOCKER_APP_TAG", TCP_MOCKER_APP_CONTAINER_TAG)
                     .withLocalCompose(true)
                     .withPull(false);
 
