@@ -397,6 +397,7 @@
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                         </buildArgs>
                         <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
+                        <tag>${env.DOCKER_TAG}</tag>
                     </configuration>
                     <executions>
                         <execution>

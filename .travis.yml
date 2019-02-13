@@ -11,10 +11,12 @@ script:
 - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
 - |
   MAVEN_DEPLOY_SKIP="true"
+  DOCKER_TAG="${TRAVIS_COMMIT}"
   if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     if [ "$TRAVIS_BRANCH" = 'master' ]; then
       PROJECT_VERSION="1.0.${TRAVIS_BUILD_NUMBER}.RELEASE"
       MAVEN_DEPLOY_SKIP="false"
+      DOCKER_TAG="latest"
     else
       PROJECT_VERSION="${TRAVIS_BRANCH}-SNAPSHOT"
     fi
@@ -23,6 +25,7 @@ script:
   fi
   export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
   export MAVEN_DEPLOY_SKIP
+  export DOCKER_TAG
 
 - "./mvnw versions:set -DnewVersion=${PROJECT_VERSION}"
 - "./continuous-deployment/before-deploy.sh"
