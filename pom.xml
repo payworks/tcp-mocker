@@ -392,20 +392,34 @@
                     <configuration>
                         <repository>tcpmocker/${project.artifactId}</repository>
                         <skipPush>${maven.deploy.skip}</skipPush>
-                        <tag>${project.version}</tag>
                         <buildArgs>
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                         </buildArgs>
                         <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
-                        <tag>${env.DOCKER_TAG}</tag>
                     </configuration>
                     <executions>
                         <execution>
-                            <id>default</id>
+                            <id>tag-latest</id>
+                            <phase>deploy</phase>
                             <goals>
                                 <goal>build</goal>
+                                <goal>tag</goal>
                                 <goal>push</goal>
                             </goals>
+                            <configuration>
+                                <tag>latest</tag>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>tag-version</id>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>tag</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
