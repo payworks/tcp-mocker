@@ -1,7 +1,7 @@
 version: "2"
 services:
   tcp-mocker-app:
-    image: tcp-mocker-app:${TCP_MOCKER_APP_VERSION}
+    image: tcpmocker/tcp-mocker-app:${TCP_MOCKER_APP_TAG}
     environment:
       - LOGGING_LEVEL_IO_PAYWORKS_LABS_TCPMOCKER=TRACE
     volumes:

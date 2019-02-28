@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.payworks.labs.tcpmocker</groupId>
@@ -7,7 +8,59 @@
     <version>LOCAL-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>payworks/labs/tcp-mocker/parent</name>
+    <description>Library for mocking any TCP based protocol</description>
+    <url>https://github.com/payworks/tcp-mocker</url>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
+    <developers>
+        <developer>
+            <id>andreysaksonov</id>
+            <name>Andrey Saksonov</name>
+            <email>andrey.saksonov@payworks.com</email>
+        </developer>
+        <developer>
+            <id>dmalch</id>
+            <name>Dmitry Malchikov</name>
+            <email>dmitry.malchikov@payworks.com</email>
+        </developer>
+        <developer>
+            <id>enrique-alonso-martin-pw</id>
+            <name>Enrique Alonso-Martin</name>
+            <email>enrique.alonso-martin@payworks.com</email>
+        </developer>
+        <developer>
+            <id>aComanche</id>
+            <name>Miguel Hernández</name>
+            <email>miguel.hernandez@payworks.com</email>
+        </developer>
+        <developer>
+            <id>pawelreal</id>
+            <name>Pawel Wozniak</name>
+            <email>pawel.wozniak@payworks.com</email>
+        </developer>
+        <developer>
+            <id>gitmik</id>
+            <name>Mikolaj Sosna</name>
+            <email>mikolaj.sosna@payworks.com</email>
+        </developer>
+        <developer>
+            <id>quarksplitter</id>
+            <name>Matej Risek</name>
+            <email>matej.risek@payworks.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
+        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/payworks/tcp-mocker</url>
+    </scm>
     <modules>
         <module>tcp-mocker-app</module>
         <module>tcp-mocker-app-test</module>
@@ -19,13 +72,6 @@
         <module>tcp-mocker-interface</module>
         <module>tcp-mocker-service</module>
     </modules>
-
-    <scm>
-        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
-        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/payworks/tcp-mocker</url>
-    </scm>
 
     <distributionManagement>
         <repository>
@@ -42,6 +88,7 @@
         <!-- Maven -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.deploy.skip>true</maven.deploy.skip>
 
         <!-- Project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -64,6 +111,7 @@
         <maven-failsafe-plugin.version>2.22.1</maven-failsafe-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <maven-source-plugin.version>3.0.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <guava-beta-checker.version>1.0</guava-beta-checker.version>
@@ -326,20 +374,6 @@
                     </executions>
                 </plugin>
                 <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${maven-gpg-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                            <phase>verify</phase>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
@@ -356,19 +390,36 @@
                     <artifactId>dockerfile-maven-plugin</artifactId>
                     <version>${spotify-dockerfile-maven-plugin.version}</version>
                     <configuration>
-                        <repository>${project.artifactId}</repository>
-                        <tag>${project.version}</tag>
+                        <repository>tcpmocker/${project.artifactId}</repository>
+                        <skipPush>${maven.deploy.skip}</skipPush>
                         <buildArgs>
                             <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
                         </buildArgs>
+                        <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                     </configuration>
                     <executions>
                         <execution>
-                            <id>default</id>
+                            <id>tag-latest</id>
+                            <phase>deploy</phase>
                             <goals>
                                 <goal>build</goal>
+                                <goal>tag</goal>
                                 <goal>push</goal>
                             </goals>
+                            <configuration>
+                                <tag>latest</tag>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>tag-version</id>
+                            <goals>
+                                <goal>build</goal>
+                                <goal>tag</goal>
+                                <goal>push</goal>
+                            </goals>
+                            <configuration>
+                                <tag>${project.version}</tag>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
@@ -394,6 +445,20 @@
                 <executions>
                     <execution>
                         <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                            <goal>test-jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
                         </goals>
@@ -449,6 +514,21 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven-gpg-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
 </project>
