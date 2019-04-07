@@ -37,7 +37,10 @@ public final class TcpServerFactory {
             logger.info("Data Handlers ({}):\n{}", dataHandlersMap.size(), dataHandlersList);
         }
 
-        serverBuilder.withDataHandlers(dataHandlersMap.values());
+        serverBuilder.withDataHandlersSupplier(
+                () -> dataHandlersLoader.dataHandlers().values()
+        );
+
         serverBuilder.withPort(port);
 
         final TcpServer server = serverBuilder.build();

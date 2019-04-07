@@ -1,27 +1,20 @@
 package io.payworks.labs.tcpmocker;
 
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
+import io.payworks.labs.tcpmocker.datahandler.supplier.DataHandlersSupplier;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public abstract class AbstractTcpServerBuilder<SERVER extends TcpServer, BUILDER extends AbstractTcpServerBuilder<SERVER, BUILDER>> implements TcpServerBuilder<SERVER> {
 
-    private final Collection<DataHandler> dataHandlers = new ArrayList<>();
+    private DataHandlersSupplier dataHandlersSupplier;
     private int port;
 
     protected abstract BUILDER self();
 
     @Override
-    public BUILDER withDataHandler(final DataHandler dataHandler) {
-        this.dataHandlers.add(dataHandler);
-        return self();
-    }
-
-    @Override
-    public BUILDER withDataHandlers(final Collection<? extends DataHandler> dataHandlers) {
-        this.dataHandlers.addAll(dataHandlers);
+    public BUILDER withDataHandlersSupplier(final DataHandlersSupplier dataHandlersSupplier) {
+        this.dataHandlersSupplier = dataHandlersSupplier;
         return self();
     }
 
@@ -32,7 +25,7 @@ public abstract class AbstractTcpServerBuilder<SERVER extends TcpServer, BUILDER
     }
 
     protected Collection<? extends DataHandler> getDataHandlers() {
-        return dataHandlers;
+        return dataHandlersSupplier.get();
     }
 
     int getPort() {

@@ -1,14 +1,10 @@
 package io.payworks.labs.tcpmocker;
 
-import io.payworks.labs.tcpmocker.datahandler.DataHandler;
-
-import java.util.Collection;
+import io.payworks.labs.tcpmocker.datahandler.supplier.DataHandlersSupplier;
 
 public interface TcpServerBuilder<T extends TcpServer> {
 
-    TcpServerBuilder<T> withDataHandler(DataHandler dataHandler);
-
-    TcpServerBuilder<T> withDataHandlers(Collection<? extends DataHandler> dataHandlers);
+    TcpServerBuilder<T> withDataHandlersSupplier(DataHandlersSupplier dataHandlersSupplier);
 
     TcpServerBuilder<T> withPort(int port);
 

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
@@ -54,7 +55,7 @@ public class NettyTcpServerTest {
                 new NettyTcpServerBuilder()
                         .withDataHandlerDispatcherFactory(givenDataHandlerDispatcherFactory());
 
-        serverBuilder.withDataHandler(dataHandler);
+        serverBuilder.withDataHandlersSupplier(() -> Collections.singleton(dataHandler));
         serverBuilder.withPort(0);
         return serverBuilder;
     }
