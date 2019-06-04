@@ -1,32 +1,41 @@
 cache.directories:
-- "$HOME/.mvn/wrapper/"
+  - "$HOME/.mvn/wrapper/"
 language: java
 jdk:
-- openjdk8
+  - openjdk8
 services:
-- docker
+  - docker
 install:
   - "./mvnw dependency:resolve"
-script:
-- echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-- |
-  MAVEN_DEPLOY_SKIP="true"
-  if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-    if [ "$TRAVIS_BRANCH" = 'master' ]; then
-      PROJECT_VERSION="1.0.${TRAVIS_BUILD_NUMBER}.RELEASE"
-      MAVEN_DEPLOY_SKIP="false"
-    else
-      PROJECT_VERSION="${TRAVIS_BRANCH}-SNAPSHOT"
+before_script:
+  - |
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
     fi
-  else
-    PROJECT_VERSION="${TRAVIS_PULL_REQUEST_BRANCH}-SNAPSHOT"
-  fi
-  export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
-  export MAVEN_DEPLOY_SKIP
 
-- "./mvnw versions:set -DnewVersion=${PROJECT_VERSION}"
-- "./continuous-deployment/before-deploy.sh"
-- "./mvnw -Dmaven.deploy.skip=${MAVEN_DEPLOY_SKIP} --settings continuous-deployment/mvnsettings.xml -e deploy -B"
+  - |
+    MAVEN_DEPLOY_SKIP="true"
+    if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+      if [ "$TRAVIS_BRANCH" = 'master' ]; then
+        MAVEN_DEPLOY_SKIP="false"
+        PROJECT_VERSION="1.0.${TRAVIS_BUILD_NUMBER}.RELEASE"
+      else
+        PROJECT_VERSION="${TRAVIS_BRANCH}-SNAPSHOT"
+      fi
+    else
+      PROJECT_VERSION="${TRAVIS_PULL_REQUEST_BRANCH}-SNAPSHOT"
+    fi
+    export MAVEN_DEPLOY_SKIP
+    export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
+
+  - "./mvnw versions:set -DnewVersion=${PROJECT_VERSION}"
+  - |
+    if [$MAVEN_DEPLOY_SKIP == "false"]; then
+      openssl aes-256-cbc -K $encrypted_a3a4db86818a_key -iv $encrypted_a3a4db86818a_iv \
+      -in continuous-deployment/payworks_sign_key.asc.enc -d | gpg --fast-import
+    fi
+script:
+  - "./mvnw -Dmaven.deploy.skip=${MAVEN_DEPLOY_SKIP} --settings continuous-deployment/mvnsettings.xml -e deploy -B"
 
 env:
   global:
