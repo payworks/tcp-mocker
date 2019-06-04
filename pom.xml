@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.payworks.labs.tcpmocker</groupId>
@@ -55,12 +54,6 @@
             <email>matej.risek@payworks.com</email>
         </developer>
     </developers>
-    <scm>
-        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
-        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>https://github.com/payworks/tcp-mocker</url>
-    </scm>
     <modules>
         <module>tcp-mocker-app</module>
         <module>tcp-mocker-app-test</module>
@@ -72,6 +65,12 @@
         <module>tcp-mocker-interface</module>
         <module>tcp-mocker-service</module>
     </modules>
+    <scm>
+        <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
+        <developerConnection>scm:git:git@github.com:payworks/tcp-mocker.git</developerConnection>
+        <tag>HEAD</tag>
+        <url>https://github.com/payworks/tcp-mocker</url>
+    </scm>
 
     <distributionManagement>
         <repository>
@@ -400,12 +399,12 @@
                     <executions>
                         <execution>
                             <id>tag-latest</id>
-                            <phase>deploy</phase>
                             <goals>
                                 <goal>build</goal>
                                 <goal>tag</goal>
                                 <goal>push</goal>
                             </goals>
+                            <phase>deploy</phase>
                             <configuration>
                                 <tag>latest</tag>
                             </configuration>
