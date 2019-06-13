@@ -1,7 +1,7 @@
 version: "2"
 services:
   maven:
-    image: openjdk:8u181-jdk-alpine
+    image: openjdk:11-jdk-slim
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - $HOME/.m2:/root/.m2
