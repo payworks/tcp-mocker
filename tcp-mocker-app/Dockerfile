@@ -1,4 +1,4 @@
-FROM openjdk:8u181-jre-alpine
+FROM openjdk:11-jre-slim
 
 MAINTAINER Andrey Saksonov <andrey.saksonov@payworks.com>
 

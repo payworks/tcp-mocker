@@ -1,5 +1,6 @@
 package io.payworks.labs.tcpmocker;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.payworks.labs.tcpmocker.data.RecordingData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +16,6 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.nio.channels.ClosedChannelException;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -118,8 +118,11 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
                 .getBody();
     }
 
-    private void whenSendingExpectedRequestTimes(final int times) {
-        Stream.generate(this::whenSendingExpectedRequest).limit(times).count();
+    @CanIgnoreReturnValue
+    private long whenSendingExpectedRequestTimes(final int times) {
+        return Stream.generate(this::whenSendingExpectedRequest)
+                .limit(times)
+                .count();
     }
 
     private String whenSendingExpectedRequest() throws RuntimeException {
