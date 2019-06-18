@@ -1,8 +1,7 @@
 package io.payworks.labs.tcpmocker.support;
 
 import com.google.common.collect.ImmutableMap;
-import io.payworks.labs.tcpmocker.datahandler.*;
-import io.payworks.labs.tcpmocker.order.Ordered;
+import io.payworks.labs.tcpmocker.datahandler.DataHandler;
 import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModel;
 import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModelReader;
 import io.payworks.labs.tcpmocker.support.json.JsonMappingReader;
@@ -26,6 +25,7 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
     public static final String DEFAULT_MAPPINGS_PATH = "classpath:/tcp-mappings/";
 
     private final ResourceLoader resourceLoader;
+    private final DataHandlerFactory dataHandlerFactory = new DataHandlerFactory();
 
     private String mappingsPath = DEFAULT_MAPPINGS_PATH;
     private Map<Pattern, DataHandlerModelReader> readersMap = DEFAULT_READERS_MAP;
@@ -47,10 +47,10 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
     }
 
     @Override
-    public Map<String, OrderedDataHandler> dataHandlers(final Set<String> filter) {
+    public Map<String, DataHandler> dataHandlers(final Set<String> filter) {
         final List<String> dirList = resourceLoader.list(mappingsPath);
 
-        final Map<String, OrderedDataHandler> dataHandlers = new LinkedHashMap<>();
+        final Map<String, DataHandler> dataHandlers = new LinkedHashMap<>();
 
         readersMap.forEach((pattern, reader) -> {
             final Predicate<String> patternPredicate = pattern.asPredicate();
@@ -62,7 +62,7 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
                 try (final InputStream inputStream = resourceLoader.getInputStream(filePath)) {
                     final DataHandlerModel dataHandlerModel = reader.read(inputStream);
 
-                    dataHandlers.put(filePath, createOrderedDataHandler(dataHandlerModel));
+                    dataHandlers.put(filePath, dataHandlerFactory.createDataHandler(dataHandlerModel));
                 } catch (final IOException e) {
                     throw new DataHandlersLoaderException(e);
                 }
@@ -70,40 +70,5 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
         });
 
         return Collections.unmodifiableMap(dataHandlers);
-    }
-
-    private OrderedDataHandler createOrderedDataHandler(final DataHandlerModel dataHandlerModel) {
-        final DataHandler dataHandler = createDataHandler(dataHandlerModel);
-
-        final int order = getOrder(dataHandlerModel);
-
-        return new OrderedDataHandler(order, dataHandler);
-    }
-
-    private DataHandler createDataHandler(final DataHandlerModel dataHandlerModel) {
-        final DataHandlerType dataHandlerType = getDataHandlerType(dataHandlerModel);
-        final String hexRegex = dataHandlerModel.getRequest().getMatches();
-        final String responseData = dataHandlerModel.getResponse().getData();
-
-        switch (dataHandlerType) {
-            case DYNAMIC_HEX_REGEX:
-                return new DynamicHexRegexDataHandler(hexRegex, responseData);
-
-            case STATIC_HEX_REGEX:
-                return new StaticHexRegexDataHandler(hexRegex, responseData);
-
-            default:
-                throw new UnsupportedOperationException(String.format("Unknown DataHandler Type: %s", dataHandlerType));
-        }
-    }
-
-    private int getOrder(final DataHandlerModel dataHandlerModel) {
-        final Integer order = dataHandlerModel.getOrder();
-        return order == null ? Ordered.DEFAULT_ORDER : order;
-    }
-
-    private DataHandlerType getDataHandlerType(final DataHandlerModel dataHandlerModel) {
-        final DataHandlerType handlerType = dataHandlerModel.getHandlerType();
-        return handlerType == null ? DataHandlerType.STATIC_HEX_REGEX : handlerType;
     }
 }
