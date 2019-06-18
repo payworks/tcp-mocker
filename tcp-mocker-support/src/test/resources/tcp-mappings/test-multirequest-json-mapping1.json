@@ -1,0 +1,13 @@
+{
+  "request": [
+    {
+      "matches": "0200\\d{10}4F2F0F90000030"
+    },
+    {
+      "matches": "0201\\d{10}4F2F0F90000030"
+    }
+  ],
+  "response": {
+    "data": "ad122e1b75356c6fdf3e9c3076a80da6"
+  }
+}

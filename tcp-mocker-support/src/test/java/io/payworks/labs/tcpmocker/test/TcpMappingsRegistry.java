@@ -19,6 +19,9 @@ public final class TcpMappingsRegistry {
     public static final String TEST_ORDERED_JSON_MAPPING_1 = filePath("/test-ordered-json-mapping1.json");
     public static final String TEST_ORDERED_JSON_MAPPING_2 = filePath("/test-ordered-json-mapping2.json");
     public static final String TEST_ORDERED_JSON_MAPPING_3 = filePath("/test-ordered-json-mapping3.json");
+    public static final String TEST_MULTIREQUEST_JSON_MAPPING_1 = filePath("/test-multirequest-json-mapping1.json");
+    public static final String TEST_MULTIREQUEST_YAML_MAPPING_1 = filePath("/test-multirequest-yaml-mapping1.yml");
+
 
     private TcpMappingsRegistry() {
     }
