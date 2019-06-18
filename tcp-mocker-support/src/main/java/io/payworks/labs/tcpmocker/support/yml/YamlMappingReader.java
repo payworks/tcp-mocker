@@ -1,6 +1,5 @@
 package io.payworks.labs.tcpmocker.support.yml;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModel;
@@ -13,8 +12,7 @@ import java.net.URL;
 
 public class YamlMappingReader implements DataHandlerModelReader {
 
-    private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory())
-            .enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+    private final ObjectMapper objectMapper = new ObjectMapper(new YAMLFactory());
 
     public DataHandlerModel read(final InputStream src) {
         try {

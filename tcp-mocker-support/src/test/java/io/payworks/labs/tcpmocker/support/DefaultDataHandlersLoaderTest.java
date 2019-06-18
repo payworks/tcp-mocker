@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
 import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModelReader;
 import io.payworks.labs.tcpmocker.support.json.JsonMappingReader;
+import io.payworks.labs.tcpmocker.support.yml.YamlMappingReader;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -20,11 +21,12 @@ import static org.hamcrest.Matchers.startsWithIgnoringCase;
 
 public class DefaultDataHandlersLoaderTest {
 
-    private static final byte[] REQUEST_TEST_DATA = base16().decode("020012345678904F2F0F90000030");
+    private static final byte[] REQUEST_TEST_DATA_0 = base16().decode("020012345678904F2F0F90000030");
+    private static final byte[] REQUEST_TEST_DATA_1 = base16().decode("020112345678904F2F0F90000030");
 
     @DataProvider
     public Object[][] testJsonMappings() {
-        return new Object[][] {
+        return new Object[][]{
                 {TEST_DEFAULT_JSON_MAPPING_1, "ad122e1b75356c6fdf3e9c3076a80da6"},
                 {TEST_DYNAMIC_JSON_MAPPING_1, "020012345678904F2F0F90000030"},
                 {TEST_DYNAMIC_JSON_MAPPING_2, "123456789042FA0000"}
@@ -32,19 +34,35 @@ public class DefaultDataHandlersLoaderTest {
     }
 
     @Test(dataProvider = "testJsonMappings")
-    public void testDataHandlerLoading(final String filePath,
-                                       final String expectedResponseDataPrefix) {
-        testDataHandlerLoading(new JsonMappingReader(), filePath, expectedResponseDataPrefix);
+    public void testJsonMappings(final String filePath,
+                                 final String expectedResponseData) {
+        final DataHandlerModelReader reader = new JsonMappingReader();
+
+        final DataHandler dataHandler = loadDataHandler(reader, filePath);
+        final Optional<byte[]> handleResult = dataHandler.handle(REQUEST_TEST_DATA_0);
+
+        assertThat(handleResult.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseData))));
     }
 
-    private static void testDataHandlerLoading(final DataHandlerModelReader dataHandlerModelReader,
-                                               final String filePath,
-                                               final String expectedResponseDataPrefix) {
-        final DataHandler dataHandler = loadDataHandler(dataHandlerModelReader, filePath);
+    @DataProvider
+    public Object[][] testMultiRequestMappings() {
+        return new Object[][]{
+                {TEST_MULTIREQUEST_JSON_MAPPING_1, new JsonMappingReader(), "ad122e1b75356c6fdf3e9c3076a80da611"},
+                {TEST_MULTIREQUEST_YAML_MAPPING_1, new YamlMappingReader(), "ad122e1b75356c6fdf3e9c3076a80da612"}
+        };
+    }
 
-        final Optional<byte[]> handleResult = dataHandler.handle(REQUEST_TEST_DATA);
+    @Test(dataProvider = "testMultiRequestMappings")
+    public void testMultiRequestMappings(final String filePath,
+                                         final DataHandlerModelReader reader,
+                                         final String expectedResponseData) {
+        final var dataHandler = loadDataHandler(reader, filePath);
 
-        assertThat(handleResult.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseDataPrefix))));
+        final Optional<byte[]> handleResult1 = dataHandler.handle(REQUEST_TEST_DATA_0);
+        final Optional<byte[]> handleResult2 = dataHandler.handle(REQUEST_TEST_DATA_1);
+
+        assertThat(handleResult1.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseData))));
+        assertThat(handleResult2.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseData))));
     }
 
     private static DataHandler loadDataHandler(final DataHandlerModelReader dataHandlerModelReader,

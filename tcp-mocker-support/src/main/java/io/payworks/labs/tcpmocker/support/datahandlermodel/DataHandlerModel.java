@@ -1,6 +1,7 @@
 package io.payworks.labs.tcpmocker.support.datahandlermodel;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.MoreObjects;
@@ -22,6 +23,7 @@ public class DataHandlerModel {
         }
 
         @JsonProperty("matches")
+        @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
         public List<String> getMatchesList() {
             return ImmutableList.copyOf(matchesList);
         }
@@ -61,6 +63,7 @@ public class DataHandlerModel {
         }
 
         @JsonProperty("data")
+        @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
         public List<String> getDataList() {
             return ImmutableList.copyOf(dataList);
         }
@@ -118,6 +121,7 @@ public class DataHandlerModel {
     }
 
     @JsonProperty("request")
+    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     public List<Request> getRequestList() {
         return ImmutableList.copyOf(requestList);
     }
