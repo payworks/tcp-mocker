@@ -6,12 +6,12 @@
 
 ### Build
 
-##### Maven
+##### Using Maven
 
 `./mvnw clean package`
 
 
-##### Docker
+##### Using Docker
 
 `docker-compose up`
 
@@ -25,27 +25,6 @@ docker run -it --rm \
   -v $(pwd)/tcp-mappings:/var/lib/tcp-mocker/tcp-mappings \
   tcpmocker/tcp-mocker-app:LOCAL-SNAPSHOT
 ```
-
-##### Maven & Java:
-
-```
-<dependency>
-    <groupId>io.payworks.labs.tcpmocker</groupId>
-    <artifactId>tcp-mocker-service</artifactId>
-    <version>LOCAL-SNAPSHOT</version>
-</dependency>
-```
-
-```
-var dataHandlersLoader = new DefaultDataHandlersLoader();
-dataHandlersLoader.setMappingsPath("./tcp-mappings")
-
-var serverBuilder = new NettyTcpServerBuilder();
-var serverFactory = new TcpServerFactory(serverBuilder, dataHandlersLoader);
-
-serverFactory.createTcpServer(10001);
-```
-
 
 ### Tips & Tricks
 
