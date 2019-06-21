@@ -9,6 +9,8 @@
     <artifactId>tcp-mocker-web</artifactId>
     <name>payworks/labs/tcp-mocker/web</name>
 
+    <!-- TODO: make web submodule of app or remove the module and embed to app-->
+
     <dependencies>
         <dependency>
             <groupId>io.payworks.labs.tcpmocker</groupId>

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+// TODO: create -util module for this class
 public final class PageCollectorTemplate {
 
     private PageCollectorTemplate() {
