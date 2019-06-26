@@ -1,12 +1,12 @@
 dataHandler {
     request {[
         matches {[
-                "ping"
+            "ping"
         ]}
     ]}
     response {[
         data {[
-                "pong"
+            "pong"
         ]}
     ]}
 }
