@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
 import io.payworks.labs.tcpmocker.support.factory.DataHandlerFactory;
 import io.payworks.labs.tcpmocker.support.factory.DefaultDataHandlerModelFactory;
+import io.payworks.labs.tcpmocker.support.groovy.GroovyDataHandlerFactory;
 import io.payworks.labs.tcpmocker.support.json.JsonDataHandlerFactory;
 import io.payworks.labs.tcpmocker.support.resource.DefaultResourceLoader;
 import io.payworks.labs.tcpmocker.support.resource.ResourceLoader;
@@ -19,7 +20,8 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
 
     public static final ImmutableMap<Pattern, DataHandlerFactory> DATA_HANDLER_FACTORIES = ImmutableMap.of(
             Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-            Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory())
+            Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()),
+            Pattern.compile(".+\\.groovy"), new GroovyDataHandlerFactory()
     );
     public static final String DEFAULT_MAPPINGS_PATH = "classpath:/tcp-mappings/";
 

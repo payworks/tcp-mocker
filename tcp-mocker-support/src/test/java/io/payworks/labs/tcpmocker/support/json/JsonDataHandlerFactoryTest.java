@@ -9,7 +9,6 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 import static io.payworks.labs.tcpmocker.test.TcpMappingsRegistry.TEST_DEFAULT_JSON_MAPPING_1;
@@ -38,7 +37,7 @@ public class JsonDataHandlerFactoryTest {
     }
 
     @Test
-    public void testCreateDefaultJsonMapping() throws IOException {
+    public void testCreateJsonDataHandler() {
         final InputStream inputStream = ResourceUtils.getInputStream(TEST_DEFAULT_JSON_MAPPING_1);
         final DataHandler expectedDataHandler = mock(DataHandler.class);
         given(dataHandlerModelFactory.createDataHandler(any()))

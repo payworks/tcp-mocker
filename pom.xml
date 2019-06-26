@@ -102,6 +102,7 @@
         <guava.version>27.1-jre</guava.version>
         <apache-commons.version>3.9</apache-commons.version>
         <commons-io.version>2.6</commons-io.version>
+        <groovy.version>2.5.7</groovy.version>
         <testcontainers.version>1.11.3</testcontainers.version>
 
         <!-- Plugins -->
@@ -212,6 +213,12 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.codehaus.groovy</groupId>
+                <artifactId>groovy-all</artifactId>
+                <version>${groovy.version}</version>
+                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
