@@ -497,7 +497,7 @@
                 <artifactId>maven-gpg-plugin</artifactId>
                 <version>${maven-gpg-plugin.version}</version>
                 <configuration>
-                    <skip>${env.MAVEN_DEPLOY_SKIP}</skip>
+                    <skip>${maven.deploy.skip}</skip>
                 </configuration>
                 <executions>
                     <execution>
