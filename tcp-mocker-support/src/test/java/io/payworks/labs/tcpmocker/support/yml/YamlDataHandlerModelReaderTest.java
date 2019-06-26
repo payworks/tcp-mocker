@@ -1,6 +1,7 @@
-package io.payworks.labs.tcpmocker.support.json;
+package io.payworks.labs.tcpmocker.support.yml;
 
-import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.resource.ResourceUtils;
 import org.testng.annotations.Test;
 
 import java.util.stream.Collectors;
@@ -9,13 +10,12 @@ import static io.payworks.labs.tcpmocker.test.TcpMappingsRegistry.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 
-public class JsonMappingReaderTest {
-
-    private final JsonMappingReader mappingReader = new JsonMappingReader();
+public class YamlDataHandlerModelReaderTest {
+    private final YamlDataHandlerModelReader modelReader = new YamlDataHandlerModelReader();
 
     @Test
-    public void readTestDefaultJsonMapping() {
-        final DataHandlerModel dataHandlerModel = mappingReader.urlRead(TEST_DEFAULT_JSON_MAPPING_1);
+    public void testReadDefaultYamlMapping() {
+        final DataHandlerModel dataHandlerModel = modelReader.readDataHandlerModel(ResourceUtils.getInputStream(TEST_DEFAULT_YAML_MAPPING_1));
         assertThat(dataHandlerModel, notNullValue());
 
         assertThat(dataHandlerModel.getRequest().getMatches(), equalToIgnoringCase("0200\\d{10}4F2F0F90000030"));
@@ -23,8 +23,8 @@ public class JsonMappingReaderTest {
     }
 
     @Test
-    public void readTestListJsonMapping() {
-        final DataHandlerModel dataHandlerModel = mappingReader.urlRead(TEST_LIST_JSON_MAPPING_1);
+    public void readTestListYamlMapping() {
+        final DataHandlerModel dataHandlerModel = modelReader.readDataHandlerModel(ResourceUtils.getInputStream(TEST_LIST_YAML_MAPPING_1));
         assertThat(dataHandlerModel, notNullValue());
 
         assertThat(dataHandlerModel.getRequest().getMatches(), equalToIgnoringCase("0200\\d{10}4F2F0F90000030"));
@@ -32,12 +32,12 @@ public class JsonMappingReaderTest {
     }
 
     @Test
-    public void readTestMultiRequestJsonMapping() {
-        final DataHandlerModel dataHandlerModel = mappingReader.urlRead(TEST_MULTIREQUEST_JSON_MAPPING_1);
+    public void readTestMultiRequestYamlMapping() {
+        final DataHandlerModel dataHandlerModel = modelReader.readDataHandlerModel(ResourceUtils.getInputStream(TEST_MULTIREQUEST_YAML_MAPPING_1));
         assertThat(dataHandlerModel, notNullValue());
 
         assertThat(dataHandlerModel.getRequestList().stream().map(DataHandlerModel.Request::getMatches).collect(Collectors.toList()), contains("0200\\d{10}4F2F0F90000030", "0201\\d{10}4F2F0F90000030"));
-        assertThat(dataHandlerModel.getResponse().getData(), equalToIgnoringCase("ad122e1b75356c6fdf3e9c3076a80da611"));
+        assertThat(dataHandlerModel.getResponse().getData(), equalToIgnoringCase("ad122e1b75356c6fdf3e9c3076a80da612"));
     }
 
 }

@@ -2,9 +2,10 @@ package io.payworks.labs.tcpmocker.support;
 
 import com.google.common.collect.ImmutableMap;
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
-import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModelReader;
-import io.payworks.labs.tcpmocker.support.json.JsonMappingReader;
-import io.payworks.labs.tcpmocker.support.yml.YamlMappingReader;
+import io.payworks.labs.tcpmocker.support.factory.DataHandlerFactory;
+import io.payworks.labs.tcpmocker.support.factory.DefaultDataHandlerModelFactory;
+import io.payworks.labs.tcpmocker.support.json.JsonDataHandlerFactory;
+import io.payworks.labs.tcpmocker.support.yml.YamlDataHandlerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -36,9 +37,9 @@ public class DefaultDataHandlersLoaderTest {
     @Test(dataProvider = "testJsonMappings")
     public void testJsonMappings(final String filePath,
                                  final String expectedResponseData) {
-        final DataHandlerModelReader reader = new JsonMappingReader();
+        final DataHandlerFactory dataHandlerFactory = new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory());
 
-        final DataHandler dataHandler = loadDataHandler(reader, filePath);
+        final DataHandler dataHandler = loadDataHandler(dataHandlerFactory, filePath);
         final Optional<byte[]> handleResult = dataHandler.handle(REQUEST_TEST_DATA_0);
 
         assertThat(handleResult.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseData))));
@@ -47,14 +48,14 @@ public class DefaultDataHandlersLoaderTest {
     @DataProvider
     public Object[][] testMultiRequestMappings() {
         return new Object[][]{
-                {TEST_MULTIREQUEST_JSON_MAPPING_1, new JsonMappingReader(), "ad122e1b75356c6fdf3e9c3076a80da611"},
-                {TEST_MULTIREQUEST_YAML_MAPPING_1, new YamlMappingReader(), "ad122e1b75356c6fdf3e9c3076a80da612"}
+                {TEST_MULTIREQUEST_JSON_MAPPING_1, new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()), "ad122e1b75356c6fdf3e9c3076a80da611"},
+                {TEST_MULTIREQUEST_YAML_MAPPING_1, new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()), "ad122e1b75356c6fdf3e9c3076a80da612"}
         };
     }
 
     @Test(dataProvider = "testMultiRequestMappings")
     public void testMultiRequestMappings(final String filePath,
-                                         final DataHandlerModelReader reader,
+                                         final DataHandlerFactory reader,
                                          final String expectedResponseData) {
         final var dataHandler = loadDataHandler(reader, filePath);
 
@@ -65,13 +66,13 @@ public class DefaultDataHandlersLoaderTest {
         assertThat(handleResult2.map(base16()::encode), is(optionalWithValue(startsWithIgnoringCase(expectedResponseData))));
     }
 
-    private static DataHandler loadDataHandler(final DataHandlerModelReader dataHandlerModelReader,
+    private static DataHandler loadDataHandler(final DataHandlerFactory dataHandlerFactory,
                                                final String filePath) {
         final DefaultDataHandlersLoader dataHandlersLoader = new DefaultDataHandlersLoader();
 
         dataHandlersLoader.setMappingsPath(Paths.get(filePath).getParent().toString());
-        dataHandlersLoader.setReadersMap(ImmutableMap.of(
-                Pattern.compile(filePath, Pattern.CASE_INSENSITIVE), dataHandlerModelReader
+        dataHandlersLoader.setDataHandlerFactories(ImmutableMap.of(
+                Pattern.compile(filePath, Pattern.CASE_INSENSITIVE), dataHandlerFactory
         ));
 
         return dataHandlersLoader.dataHandlers().get(filePath);

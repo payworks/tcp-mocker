@@ -1,14 +1,15 @@
-package io.payworks.labs.tcpmocker.support;
+package io.payworks.labs.tcpmocker.support.factory;
 
 import io.payworks.labs.tcpmocker.datahandler.*;
 import io.payworks.labs.tcpmocker.order.Ordered;
-import io.payworks.labs.tcpmocker.support.datahandlermodel.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class DataHandlerFactory {
+public final class DefaultDataHandlerModelFactory implements DataHandlerModelFactory {
 
+    @Override
     public DataHandler createDataHandler(final DataHandlerModel dataHandlerModel) {
         final DataHandlerType dataHandlerType = getDataHandlerType(dataHandlerModel);
         final String responseData = dataHandlerModel.getResponse().getData();
@@ -22,9 +23,9 @@ public final class DataHandlerFactory {
         return new OrderedDataHandler(order, new CompositeDataHandler(dataHandlers));
     }
 
-    public HexRegexDataHandler createHexRegexDataHandler(final DataHandlerType dataHandlerType,
-                                                         final String hexRegex,
-                                                         final String responseData) {
+    private static HexRegexDataHandler createHexRegexDataHandler(final DataHandlerType dataHandlerType,
+                                                                 final String hexRegex,
+                                                                 final String responseData) {
         switch (dataHandlerType) {
             case DYNAMIC_HEX_REGEX:
                 return new DynamicHexRegexDataHandler(hexRegex, responseData);

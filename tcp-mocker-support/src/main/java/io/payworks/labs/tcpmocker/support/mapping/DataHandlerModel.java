@@ -1,4 +1,4 @@
-package io.payworks.labs.tcpmocker.support.datahandlermodel;
+package io.payworks.labs.tcpmocker.support.mapping;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
