@@ -1,6 +1,6 @@
 package io.payworks.labs.tcpmocker.support.yml;
 
-import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerModel;
 import io.payworks.labs.tcpmocker.support.resource.ResourceUtils;
 import org.testng.annotations.Test;
 

@@ -1,21 +1,19 @@
-import io.payworks.labs.tcpmocker.support.DataBuilder
-import io.payworks.labs.tcpmocker.support.groovy.GroovyDataHandler
+import io.payworks.labs.tcpmocker.support.builder.BinaryBuilder
+import io.payworks.labs.tcpmocker.support.builder.DataHandlerBuilder
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerBuilderProvider
 
-class TestGroovyDataHandler extends GroovyDataHandler {
-
-    @Override
-    protected DataBuilder request() {
-        requestBuilder()
-                .stx()
-                .ascii("ping")
-                .etx()
-    }
+class TestDataHandlerProvider extends DataHandlerBuilderProvider {
 
     @Override
-    protected DataBuilder response() {
-        responseBuilder()
-                .stx()
-                .ascii("pong")
-                .etx()
+    protected DataHandlerBuilder dataHandler() {
+        return new DataHandlerBuilder()
+                .request(new BinaryBuilder()
+                        .stx()
+                        .ascii("ping")
+                        .etx())
+                .response(new BinaryBuilder()
+                        .stx()
+                        .ascii("pong")
+                        .etx())
     }
 }

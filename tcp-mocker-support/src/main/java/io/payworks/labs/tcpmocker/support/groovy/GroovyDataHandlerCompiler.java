@@ -1,7 +1,7 @@
 package io.payworks.labs.tcpmocker.support.groovy;
 
 import groovy.lang.GroovyClassLoader;
-import io.payworks.labs.tcpmocker.datahandler.DataHandler;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerProvider;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -18,17 +18,21 @@ public class GroovyDataHandlerCompiler {
     }
 
     @SuppressWarnings("unchecked")
-    public DataHandler compile(final String groovyDataHandlerContent) {
-        if (groovyDataHandlerContent == null || groovyDataHandlerContent.trim().isEmpty()) {
-            throw new IllegalArgumentException("Unable to parse Groovy Data Handler file because is either null or empty!");
+    public DataHandlerProvider compile(final String groovyDataHandlerProvider) {
+        if (groovyDataHandlerProvider == null || groovyDataHandlerProvider.trim().isEmpty()) {
+            throw new IllegalArgumentException("Unable to parse Groovy Data Handler definition file because is either null or empty!");
         }
 
+        return createDataHandlerProvider(groovyDataHandlerProvider);
+    }
+
+    private DataHandlerProvider createDataHandlerProvider(final String groovyDataHandlerProvider) {
         try {
-            return ((Class<DataHandler>) groovyClassLoader.parseClass(groovyDataHandlerContent))
+            return ((Class<DataHandlerProvider>) groovyClassLoader.parseClass(groovyDataHandlerProvider))
                     .getDeclaredConstructor()
                     .newInstance();
         } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Unable to create GroovyDataHandler instance!", e);
+            throw new IllegalStateException("Unable to create DataHandlerProvider instance!", e);
         }
     }
 }
