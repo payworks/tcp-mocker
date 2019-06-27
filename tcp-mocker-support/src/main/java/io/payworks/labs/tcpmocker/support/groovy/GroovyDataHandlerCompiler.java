@@ -1,20 +1,18 @@
 package io.payworks.labs.tcpmocker.support.groovy;
 
-import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyShell;
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class GroovyDataHandlerCompiler {
 
-    private final GroovyClassLoader groovyClassLoader;
+    private final GroovyShell groovyShell;
 
-    public GroovyDataHandlerCompiler(final GroovyClassLoader groovyClassLoader) {
-        this.groovyClassLoader = groovyClassLoader;
+    public GroovyDataHandlerCompiler(final GroovyShell groovyShell) {
+        this.groovyShell = groovyShell;
     }
 
     public GroovyDataHandlerCompiler() {
-        this(GroovyClassLoaderFactory.newGroovyClassLoaderViaPriviligedAction());
+        this(new GroovyShell());
     }
 
     @SuppressWarnings("unchecked")
@@ -23,12 +21,6 @@ public class GroovyDataHandlerCompiler {
             throw new IllegalArgumentException("Unable to parse Groovy Data Handler file because is either null or empty!");
         }
 
-        try {
-            return ((Class<DataHandler>) groovyClassLoader.parseClass(groovyDataHandlerContent))
-                    .getDeclaredConstructor()
-                    .newInstance();
-        } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalStateException("Unable to create GroovyDataHandler instance!", e);
-        }
+        return (DataHandler) groovyShell.evaluate(groovyDataHandlerContent);
     }
 }
