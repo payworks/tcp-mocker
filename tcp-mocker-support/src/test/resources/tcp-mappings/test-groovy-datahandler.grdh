@@ -1,7 +1,7 @@
 import io.payworks.labs.tcpmocker.support.DataBuilder
 import io.payworks.labs.tcpmocker.support.groovy.GroovyDataHandler
 
-class TestGroovyDataHadler extends GroovyDataHandler {
+class TestGroovyDataHandler extends GroovyDataHandler {
 
     @Override
     protected DataBuilder request() {
