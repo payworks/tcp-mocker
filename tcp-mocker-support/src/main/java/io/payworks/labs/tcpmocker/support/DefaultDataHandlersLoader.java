@@ -21,7 +21,7 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
     public static final ImmutableMap<Pattern, DataHandlerFactory> DATA_HANDLER_FACTORIES = ImmutableMap.of(
             Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()),
             Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-            Pattern.compile(".+\\.groovy"), new GroovyDataHandlerFactory()
+            Pattern.compile(".+\\.grdh"), new GroovyDataHandlerFactory()
     );
     public static final String DEFAULT_MAPPINGS_PATH = "classpath:/tcp-mappings/";
 

@@ -1,21 +1,32 @@
 package io.payworks.labs.tcpmocker.support.groovy;
 
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
+import io.payworks.labs.tcpmocker.support.DataBuilder;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 public abstract class GroovyDataHandler implements DataHandler {
 
-    protected abstract boolean matches(byte[] request);
-
-    protected byte[] response() { return new byte[0]; }
+    protected abstract DataBuilder request();
+    protected DataBuilder response() {
+        return responseBuilder();
+    }
 
     @Override
     public Optional<byte[]> handle(final byte[] data) {
-        if (matches(data)) {
-            return Optional.of(response());
+        if (Arrays.equals(request().build(), data)) {
+            return Optional.of(response().build());
         } else {
             return Optional.empty();
         }
+    }
+
+    protected static DataBuilder requestBuilder() {
+        return new DataBuilder();
+    }
+
+    protected static DataBuilder responseBuilder() {
+        return new DataBuilder();
     }
 }

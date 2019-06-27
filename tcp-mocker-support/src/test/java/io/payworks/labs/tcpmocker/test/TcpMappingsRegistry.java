@@ -21,7 +21,7 @@ public final class TcpMappingsRegistry {
     public static final String TEST_ORDERED_JSON_MAPPING_3 = filePath("/test-ordered-json-mapping3.json");
     public static final String TEST_MULTIREQUEST_JSON_MAPPING_1 = filePath("/test-multirequest-json-mapping1.json");
     public static final String TEST_MULTIREQUEST_YAML_MAPPING_1 = filePath("/test-multirequest-yaml-mapping1.yml");
-    public static final String TEST_GROOVY_DATA_HANDLER = filePath("/test-groovy-datahandler.groovy");
+    public static final String TEST_GROOVY_DATA_HANDLER = filePath("/test-groovy-datahandler.grdh");
 
 
     private TcpMappingsRegistry() {
