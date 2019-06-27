@@ -1,7 +1,7 @@
 package io.payworks.labs.tcpmocker.support.json;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerModel;
 
 import java.io.IOException;
 import java.io.InputStream;

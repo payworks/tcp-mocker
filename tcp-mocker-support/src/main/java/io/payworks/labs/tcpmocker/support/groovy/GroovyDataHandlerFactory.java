@@ -1,6 +1,7 @@
 package io.payworks.labs.tcpmocker.support.groovy;
 
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerProvider;
 import io.payworks.labs.tcpmocker.support.factory.DataHandlerFactory;
 import org.apache.commons.io.IOUtils;
 
@@ -24,7 +25,8 @@ public class GroovyDataHandlerFactory implements DataHandlerFactory {
     public DataHandler create(final InputStream src) {
         try {
             final String groovyScript = IOUtils.toString(src, StandardCharsets.UTF_8);
-            return groovyDataHandlerCompiler.compile(groovyScript);
+            final DataHandlerProvider dataHandlerProvider = groovyDataHandlerCompiler.compile(groovyScript);
+            return dataHandlerProvider.getDataHandler();
         } catch (final IOException e) {
             throw new GroovyDataHandlerFactoryException(e);
         }

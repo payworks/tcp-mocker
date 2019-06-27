@@ -2,7 +2,7 @@ package io.payworks.labs.tcpmocker.support.factory;
 
 import io.payworks.labs.tcpmocker.datahandler.*;
 import io.payworks.labs.tcpmocker.order.Ordered;
-import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerModel;
 
 import java.util.List;
 import java.util.stream.Collectors;

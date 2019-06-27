@@ -1,24 +1,24 @@
-package io.payworks.labs.tcpmocker.support;
+package io.payworks.labs.tcpmocker.support.builder;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataBuilder {
+public class BinaryBuilder {
 
     private List<byte[]> parts = new ArrayList<>();
 
-    public DataBuilder ascii(final String str) {
+    public BinaryBuilder ascii(final String str) {
         parts.add(str.getBytes(StandardCharsets.US_ASCII));
         return this;
     }
 
-    public DataBuilder stx() {
+    public BinaryBuilder stx() {
         parts.add(new byte[]{0x02});
         return this;
     }
 
-    public DataBuilder etx() {
+    public BinaryBuilder etx() {
         parts.add(new byte[]{0x03});
         return this;
     }

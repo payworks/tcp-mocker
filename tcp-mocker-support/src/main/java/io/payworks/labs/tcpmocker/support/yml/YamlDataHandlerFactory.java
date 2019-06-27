@@ -3,7 +3,7 @@ package io.payworks.labs.tcpmocker.support.yml;
 import io.payworks.labs.tcpmocker.datahandler.DataHandler;
 import io.payworks.labs.tcpmocker.support.factory.DataHandlerFactory;
 import io.payworks.labs.tcpmocker.support.factory.DataHandlerModelFactory;
-import io.payworks.labs.tcpmocker.support.mapping.DataHandlerModel;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerModel;
 
 import java.io.InputStream;
 
