@@ -1,7 +1,7 @@
 package io.payworks.labs.tcpmocker.support.groovy;
 
 import groovy.lang.GroovyShell;
-import io.payworks.labs.tcpmocker.datahandler.DataHandler;
+import io.payworks.labs.tcpmocker.support.definition.DataHandlerProvider;
 
 public class GroovyDataHandlerCompiler {
 
@@ -16,11 +16,11 @@ public class GroovyDataHandlerCompiler {
     }
 
     @SuppressWarnings("unchecked")
-    public DataHandler compile(final String groovyDataHandlerContent) {
+    public DataHandlerProvider compile(final String groovyDataHandlerContent) {
         if (groovyDataHandlerContent == null || groovyDataHandlerContent.trim().isEmpty()) {
             throw new IllegalArgumentException("Unable to parse Groovy Data Handler file because is either null or empty!");
         }
 
-        return (DataHandler) groovyShell.evaluate(groovyDataHandlerContent);
+        return (DataHandlerProvider) groovyShell.evaluate(groovyDataHandlerContent);
     }
 }

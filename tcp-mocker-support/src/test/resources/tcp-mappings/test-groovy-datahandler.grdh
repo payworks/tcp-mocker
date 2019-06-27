@@ -1,12 +1,11 @@
-import static io.payworks.labs.tcpmocker.support.groovy.GroovyDataHandler.*
+import static io.payworks.labs.tcpmocker.support.groovy.BuilderDsl.*
 
 dataHandler()
-        .request(binary()
-                .stx()
-                .ascii("ping")
-                .etx())
-        .response(binary()
-                .stx()
-                .ascii("pong")
-                .etx())
-        .build()
+    .request(binary()
+        .stx()
+        .ascii("ping")
+        .etx())
+    .response(binary()
+        .stx()
+        .ascii("pong")
+        .etx())
