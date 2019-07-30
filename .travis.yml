@@ -1,5 +1,7 @@
-cache.directories:
-  - "$HOME/.mvn/wrapper/"
+cache:
+  directories:
+    - ".mvn/wrapper"
+    - "$HOME/.m2"
 language: java
 jdk:
   - openjdk11
