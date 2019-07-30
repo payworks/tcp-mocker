@@ -11,11 +11,6 @@
     <name>payworks/labs/tcp-mocker/core</name>
 
     <dependencies>
-        <!-- TODO: core must not be dependant on model/recordings -->
-        <dependency>
-            <groupId>io.payworks.labs.tcpmocker</groupId>
-            <artifactId>tcp-mocker-model</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>

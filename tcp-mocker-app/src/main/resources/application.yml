@@ -2,8 +2,9 @@ mockserver:
   port: 10001
   tcp-mappings-path: file:${user.home}/.tcp-mocker/tcp-mappings
 
-# Enabling H2 Console
 spring:
+  main:
+    web-application-type: servlet # TODO: change to reactive
   jpa:
     open-in-view: false
   h2:
@@ -11,3 +12,6 @@ spring:
       enabled: true
       settings:
         web-allow-others: true
+  groovy:
+    template:
+      check-template-location: false

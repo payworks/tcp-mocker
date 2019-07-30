@@ -1,5 +1,5 @@
 mockserver:
-  port: 10001
+  port: ${random.int(10001,10100)}
   tcp-mappings-path: classpath:/tcp-mappings/
 
 logging:

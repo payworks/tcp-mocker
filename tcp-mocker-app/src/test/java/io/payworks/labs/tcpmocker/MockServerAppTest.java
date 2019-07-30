@@ -1,7 +1,10 @@
 package io.payworks.labs.tcpmocker;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.payworks.labs.tcpmocker.data.RecordingData;
+import io.payworks.labs.tcpmocker.properties.MockServerProperties;
+import io.payworks.labs.tcpmocker.recording.RecordingData;
+import io.payworks.labs.tcpmocker.test.pageable.PageableCollector;
+import io.payworks.labs.tcpmocker.test.tcpclient.SimpleTcpClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -9,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.testng.annotations.AfterMethod;
@@ -20,18 +24,20 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.google.common.io.BaseEncoding.base16;
-import static io.payworks.labs.tcpmocker.util.PageCollectorTemplate.collectAllPages;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+@DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MockServerAppTest extends AbstractTestNGSpringContextTests {
+
+    public static final long TEST_TIMEOUT = 5000L;
 
     private static final String REQUEST_PAYLOAD = "70696E67"; // ping
     private static final String REPLY_PAYLOAD = "706F6E67"; // pong
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private TestRestTemplate restTemplate; // TODO: change to WebTestClient
 
     @Autowired
     private MockServerProperties mockServerProperties;
@@ -39,27 +45,22 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
     private SimpleTcpClient tcpClient;
 
     @BeforeMethod
-    public void setUp() throws Exception {
+    public void setup() throws Exception {
         tcpClient = new SimpleTcpClient("localhost", mockServerProperties.getPort());
     }
 
     @AfterMethod
-    public void tearDown() throws Exception {
+    public void close() throws Exception {
         tcpClient.close();
     }
 
-    @Test(timeOut = 5000L)
-    public void matchingRequestIsServed() {
-        final String reply = whenSendingExpectedRequest();
+    @Test(timeOut = TEST_TIMEOUT)
+    public void requestIsHandledAndRecorded() {
+        final String reply = whenSendRequestPayload();
 
         assertThat(reply).isEqualTo(REPLY_PAYLOAD);
-    }
 
-    @Test(timeOut = 5000L)
-    public void requestIsRecorded() {
-        final String reply = whenSendingExpectedRequest();
-
-        final ResponseEntity<RecordingData> response = whenQueryingForLastRecording();
+        final ResponseEntity<RecordingData> response = whenQueryLastRecording();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody())
@@ -72,12 +73,13 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
     }
 
     @Test
-    public void canRetrieveAllRecordingsUsingPages() {
-        whenSendingExpectedRequestTimes(100);
+    public void getAllRecordingsUsingRecordingsApi() {
+        whenSendRequestPayloadTimes(100);
 
-        final List<RecordingData> recordingData = collectAllPages(this::whenQueryingForPageAndSize, 13);
+        final List<RecordingData> recordingDataList =
+                PageableCollector.collectToList(this::whenQueryingForPageAndSize, 13);
 
-        assertThat(recordingData)
+        assertThat(recordingDataList)
                 .isNotEmpty()
                 .extracting(
                         RecordingData::getRequest,
@@ -86,16 +88,16 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
                         tuple(REQUEST_PAYLOAD, REPLY_PAYLOAD));
     }
 
-    @Test()
-    public void canReturnEmptyReply() throws IOException {
-        String reply = base16().encode(
+    @Test
+    public void mayReceiveEmptyReply() throws IOException {
+        final String reply = base16().encode(
                 tcpClient.sendAndReceive(
                         base16().decode("70696E6800")));
 
         assertThat(reply).isEmpty();
     }
 
-    private ResponseEntity<RecordingData> whenQueryingForLastRecording() {
+    private ResponseEntity<RecordingData> whenQueryLastRecording() {
         return restTemplate.getForEntity(
                 UriComponentsBuilder.fromUriString(restTemplate.getRootUri())
                         .path("/recordings/last")
@@ -113,23 +115,20 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
                         .toUri(),
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<RecordingData>>() {
-                })
+                new ParameterizedTypeReference<List<RecordingData>>() {})
                 .getBody();
     }
 
     @CanIgnoreReturnValue
-    private long whenSendingExpectedRequestTimes(final int times) {
-        return Stream.generate(this::whenSendingExpectedRequest)
+    private long whenSendRequestPayloadTimes(final int times) {
+        return Stream.generate(this::whenSendRequestPayload)
                 .limit(times)
                 .count();
     }
 
-    private String whenSendingExpectedRequest() throws RuntimeException {
+    private String whenSendRequestPayload() throws RuntimeException {
         try {
-            return base16().encode(
-                    tcpClient.sendAndReceive(
-                            base16().decode(REQUEST_PAYLOAD)));
+            return base16().encode(tcpClient.sendAndReceive(base16().decode(REQUEST_PAYLOAD)));
         } catch (final IOException ex) {
             throw new RuntimeException(ex);
         }

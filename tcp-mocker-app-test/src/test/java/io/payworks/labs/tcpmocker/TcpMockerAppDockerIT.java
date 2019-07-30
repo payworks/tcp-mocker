@@ -1,5 +1,6 @@
 package io.payworks.labs.tcpmocker;
 
+import io.payworks.labs.tcpmocker.test.tcpclient.SimpleTcpClient;
 import org.testcontainers.containers.DockerComposeContainer;
 import org.testng.annotations.*;
 

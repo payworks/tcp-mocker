@@ -2,17 +2,30 @@ FROM openjdk:11-jre-slim
 
 MAINTAINER Andrey Saksonov <andrey.saksonov@payworks.com>
 
-ARG JAR_FILE
-ARG PORT=10001
+VOLUME /tmp
+
+ARG APP_DIR
+ARG APP_MAIN
+
+ARG WEBPORT=8080
+
+ARG TCPPORT=10001
 ARG TCPMAPPINGSPATH=/var/lib/tcp-mocker/tcp-mappings
 
-ADD target/${JAR_FILE} /opt/tcp-mocker/app.jar
+COPY ${APP_DIR}/BOOT-INF/lib /app/lib
+COPY ${APP_DIR}/META-INF /app/META-INF
+COPY ${APP_DIR}/BOOT-INF/classes /app
 
-ENV MOCKSERVER_PORT=${PORT} \
-    MOCKSERVER_TCPMAPPINGSPATH=${TCPMAPPINGSPATH}
+ENV MOCKSERVER_PORT=${TCPPORT} \
+    MOCKSERVER_TCPMAPPINGSPATH=${TCPMAPPINGSPATH} \
+    SERVER_PORT=${WEBPORT}
 
-EXPOSE $PORT
+ENV JAVA_OPTIONS="-Dfile.encoding=UTF-8"
+ENV JAVA_MAIN=$APP_MAIN
+
+EXPOSE $TCPPORT
+EXPOSE $WEBPORT
 
 VOLUME ["${TCPMAPPINGSPATH}"]
 
-CMD ["java", "-jar", "/opt/tcp-mocker/app.jar"]
+CMD sh -c "java ${JAVA_OPTIONS} -cp app:app/lib/* ${JAVA_MAIN}"

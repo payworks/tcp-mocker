@@ -59,11 +59,9 @@
         <module>tcp-mocker-app-test</module>
         <module>tcp-mocker-core</module>
         <module>tcp-mocker-netty</module>
+        <module>tcp-mocker-recordings</module>
         <module>tcp-mocker-support</module>
-        <module>tcp-mocker-model</module>
-        <module>tcp-mocker-web</module>
-        <module>tcp-mocker-interface</module>
-        <module>tcp-mocker-service</module>
+        <module>tcp-mocker-test</module>
     </modules>
     <scm>
         <connection>scm:git:git://github.com/payworks/tcp-mocker.git</connection>
@@ -117,8 +115,8 @@
         <maven-enforcer-plugin.version>3.0.0-M2</maven-enforcer-plugin.version>
         <guava-beta-checker.version>1.0</guava-beta-checker.version>
         <google-errorprone.version>2.3.3</google-errorprone.version>
-        <spotify-dockerfile-maven-plugin.version>1.4.8</spotify-dockerfile-maven-plugin.version>
         <sortpom-maven-plugin.version>2.10.0</sortpom-maven-plugin.version>
+        <dockerfile-maven-plugin.version>1.4.10</dockerfile-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -141,22 +139,12 @@
             </dependency>
             <dependency>
                 <groupId>io.payworks.labs.tcpmocker</groupId>
-                <artifactId>tcp-mocker-interface</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.payworks.labs.tcpmocker</groupId>
-                <artifactId>tcp-mocker-model</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.payworks.labs.tcpmocker</groupId>
                 <artifactId>tcp-mocker-netty</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.payworks.labs.tcpmocker</groupId>
-                <artifactId>tcp-mocker-service</artifactId>
+                <artifactId>tcp-mocker-recordings</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -166,7 +154,7 @@
             </dependency>
             <dependency>
                 <groupId>io.payworks.labs.tcpmocker</groupId>
-                <artifactId>tcp-mocker-web</artifactId>
+                <artifactId>tcp-mocker-test</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -359,54 +347,14 @@
                     </executions>
                 </plugin>
                 <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${dockerfile-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>repackage</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>com.spotify</groupId>
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${spotify-dockerfile-maven-plugin.version}</version>
-                    <configuration>
-                        <repository>tcpmocker/${project.artifactId}</repository>
-                        <skipPush>${maven.deploy.skip}</skipPush>
-                        <buildArgs>
-                            <JAR_FILE>${project.build.finalName}.jar</JAR_FILE>
-                        </buildArgs>
-                        <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <id>tag-latest</id>
-                            <goals>
-                                <goal>build</goal>
-                                <goal>tag</goal>
-                                <goal>push</goal>
-                            </goals>
-                            <phase>deploy</phase>
-                            <configuration>
-                                <tag>latest</tag>
-                            </configuration>
-                        </execution>
-                        <execution>
-                            <id>tag-version</id>
-                            <goals>
-                                <goal>build</goal>
-                                <goal>tag</goal>
-                                <goal>push</goal>
-                            </goals>
-                            <configuration>
-                                <tag>${project.version}</tag>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

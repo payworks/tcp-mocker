@@ -6,10 +6,17 @@
 
 ### Build
 
+###### Supported Java Versions:
+* Java 11
+
+```
+Java 12 - Not Supported Yet
+    https://github.com/google/error-prone/pull/1107
+```
+
 ##### Using Maven
 
 `./mvnw clean package`
-
 
 ##### Using Docker
 
