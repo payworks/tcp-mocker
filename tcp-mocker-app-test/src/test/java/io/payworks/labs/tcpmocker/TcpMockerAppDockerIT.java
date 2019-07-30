@@ -21,7 +21,7 @@ public class TcpMockerAppDockerIT {
     private static final String TCP_MOCKER_APP_CONTAINER_TAG = Optional.ofNullable(System.getenv("PROJECT_VERSION"))
             .orElse("LOCAL-SNAPSHOT");
 
-    private static final DockerComposeContainer tcpMocker =
+    private static final DockerComposeContainer tcpMockerContainer =
             new DockerComposeContainer(new File("tcp-mocker-app/docker-compose.yml"))
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT)
                     .withExposedService(TCP_MOCKER_APP_SERVICE_NAME, WEB_SERVICE_PORT)
@@ -33,12 +33,12 @@ public class TcpMockerAppDockerIT {
 
     @BeforeClass
     public static void startContainer() {
-        tcpMocker.start();
+        tcpMockerContainer.start();
     }
 
     @AfterClass
     public static void stopContainer() {
-        tcpMocker.stop();
+        tcpMockerContainer.stop();
     }
 
     @BeforeMethod
@@ -58,11 +58,11 @@ public class TcpMockerAppDockerIT {
         assertThat(received, equalTo("pong"));
     }
 
-    private Integer getTcpServicePort() {
-        return tcpMocker.getServicePort(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT);
+    private static Integer getTcpServicePort() {
+        return tcpMockerContainer.getServicePort(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT);
     }
 
-    private String getTcpServiceHost() {
-        return tcpMocker.getServiceHost(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT);
+    private static String getTcpServiceHost() {
+        return tcpMockerContainer.getServiceHost(TCP_MOCKER_APP_SERVICE_NAME, TCP_SERVICE_PORT);
     }
 }
