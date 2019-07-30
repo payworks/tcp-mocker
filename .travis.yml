@@ -37,7 +37,7 @@ before_script:
       -in continuous-deployment/payworks_sign_key.asc.enc -d | gpg --fast-import
     fi
 script:
-  - "./mvnw -Dmaven.deploy.skip=${MAVEN_DEPLOY_SKIP} --settings continuous-deployment/mvnsettings.xml -e deploy -B"
+  - "./mvnw -Dmaven.deploy.skip=${MAVEN_DEPLOY_SKIP} --settings continuous-deployment/mvnsettings.xml -e deploy -B -V"
 
 env:
   global:
