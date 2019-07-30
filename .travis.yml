@@ -1,14 +1,14 @@
 cache:
   directories:
-    - ".mvn/wrapper"
-    - "$HOME/.m2"
+    - .mvn/wrapper
+    - $HOME/.m2
 language: java
 jdk:
   - openjdk11
 services:
   - docker
 install:
-  - "./mvnw dependency:resolve"
+  - "./mvnw -e dependency:resolve -B -V"
 before_script:
   - |
     if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
@@ -30,7 +30,7 @@ before_script:
     export MAVEN_DEPLOY_SKIP
     export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
 
-  - "./mvnw versions:set -DnewVersion=${PROJECT_VERSION}"
+  - "./mvnw versions:set -DnewVersion=${PROJECT_VERSION} -B -V"
   - |
     if [ $MAVEN_DEPLOY_SKIP == "false" ]; then
       openssl aes-256-cbc -K $encrypted_a3a4db86818a_key -iv $encrypted_a3a4db86818a_iv \
