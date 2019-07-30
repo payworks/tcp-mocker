@@ -21,6 +21,9 @@ public class DataHandlerBuilder {
     }
 
     public DataHandler build() {
+        if (requestBuilder == null) requestBuilder = new BinaryMatcherBuilder();
+        if (responseBuilder == null) responseBuilder = new BinaryMatcherBuilder();
+
         return data -> {
             if (Arrays.equals(requestBuilder.build(), data)) {
                 return Optional.of(responseBuilder.build());
