@@ -7,15 +7,15 @@ import java.util.Optional;
 
 public class DataHandlerBuilder {
 
-    private BinaryBuilder requestBuilder;
-    private BinaryBuilder responseBuilder = new BinaryBuilder();
+    private BinaryMatcherBuilder requestBuilder;
+    private BinaryMatcherBuilder responseBuilder;
 
-    public DataHandlerBuilder request(final BinaryBuilder requestBuilder) {
+    public DataHandlerBuilder request(final BinaryMatcherBuilder requestBuilder) {
         this.requestBuilder = requestBuilder;
         return this;
     }
 
-    public DataHandlerBuilder response(final BinaryBuilder responseBuilder) {
+    public DataHandlerBuilder response(final BinaryMatcherBuilder responseBuilder) {
         this.responseBuilder = responseBuilder;
         return this;
     }
