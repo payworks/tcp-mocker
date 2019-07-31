@@ -8,7 +8,7 @@ jdk:
 services:
   - docker
 install:
-  - "./mvnw -e dependency:resolve -B -V"
+  - "./mvnw -e dependency:collect -B -V"
 before_script:
   - |
     if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
