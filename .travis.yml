@@ -44,7 +44,7 @@ before_deploy:
 deploy:
   skip_cleanup: true
   provider: script
-  script: "./mvnw -e --settings continuous-deployment/mvnsettings.xml -Dmaven.test.skip=true -Dmaven.deploy.skip=false deploy -B -V"
+  script: "./mvnw -e --settings continuous-deployment/mvnsettings.xml -DskipTests -Dmaven.deploy.skip=false deploy -B -V"
   on:
     repo: payworks/tcp-mocker
     branch: master
