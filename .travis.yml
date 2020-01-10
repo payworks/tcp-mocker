@@ -33,7 +33,7 @@ before_script:
     export SKIP_DEPLOY
     export PROJECT_VERSION=$(echo $PROJECT_VERSION | sed -r s/[\\/:\"\<\>\|?*]/-/g)
 script:
-  - "./mvnw -e --settings continuous-deployment/mvnsettings.xml -DnewVersion=${PROJECT_VERSION} versions:set install -B -V"
+  - "./mvnw -e --settings continuous-deployment/mvnsettings.xml -DnewVersion=${PROJECT_VERSION} install versions:set -B -V"
 before_deploy:
   - |
     if [ "$SKIP_DEPLOY" == "false" ]; then
