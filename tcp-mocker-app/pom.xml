@@ -145,7 +145,7 @@
                     <skipPush>${maven.deploy.skip}</skipPush>
                     <buildArgs>
                         <APP_DIR>target/app</APP_DIR>
-                        <APP_MAIN>io.payworks.labs.tcpmocker.MockServerApp</APP_MAIN>
+                        <APP_MAIN>io.payworks.labs.tcpmocker.TcpMockerApp</APP_MAIN>
                     </buildArgs>
                     <googleContainerRegistryEnabled>false</googleContainerRegistryEnabled>
                 </configuration>

@@ -43,7 +43,7 @@ public class RecordingsControllerTest extends AbstractTestNGSpringContextTests {
         given(recordingsService.getLastRecording()).willReturn(Optional.of(givenRecordingData));
 
         this.mvc.perform(
-                get("/recordings/last").accept(MediaType.APPLICATION_JSON_UTF8))
+                get("/recordings/last").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.timestamp", is(givenRecordingData.getTimestamp().toString())))
                 .andExpect(jsonPath("$.request", is(givenRecordingData.getRequest())))
@@ -73,7 +73,7 @@ public class RecordingsControllerTest extends AbstractTestNGSpringContextTests {
         given(recordingsService.listRecordings(5, 10)).willReturn(givenRecordingData);
 
         final ResultActions resultActions = this.mvc.perform(
-                get("/recordings?page=5&size=10").accept(MediaType.APPLICATION_JSON_UTF8))
+                get("/recordings?page=5&size=10").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(10)));
 
@@ -107,7 +107,7 @@ public class RecordingsControllerTest extends AbstractTestNGSpringContextTests {
         given(recordingsService.listRecordings(anyInt(), anyInt())).willReturn(ImmutableList.of());
 
         this.mvc.perform(
-                get("/recordings?page=0&size=10").accept(MediaType.APPLICATION_JSON_UTF8))
+                get("/recordings?page=0&size=10").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }

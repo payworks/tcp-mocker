@@ -1,6 +1,6 @@
-mockserver:
-  port: ${random.int(10001,10100)}
-  tcp-mappings-path: classpath:/tcp-mappings/
+tcp-mocker:
+  listen-port: ${random.int(10001,10100)}
+  mappings-path: classpath:/tcp-mappings/
 
 logging:
   level:

@@ -1,7 +1,7 @@
 package io.payworks.labs.tcpmocker;
 
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
-import io.payworks.labs.tcpmocker.properties.MockServerProperties;
+import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import io.payworks.labs.tcpmocker.recording.RecordingData;
 import io.payworks.labs.tcpmocker.test.pageable.PageableCollector;
 import io.payworks.labs.tcpmocker.test.tcpclient.SimpleTcpClient;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.tuple;
 
 @DirtiesContext
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class MockServerAppTest extends AbstractTestNGSpringContextTests {
+public class TcpMockerAppTest extends AbstractTestNGSpringContextTests {
 
     public static final long TEST_TIMEOUT = 5000L;
 
@@ -37,16 +37,16 @@ public class MockServerAppTest extends AbstractTestNGSpringContextTests {
     private static final String REPLY_PAYLOAD = "706F6E67"; // pong
 
     @Autowired
-    private TestRestTemplate restTemplate; // TODO: change to WebTestClient
+    private TestRestTemplate restTemplate;
 
     @Autowired
-    private MockServerProperties mockServerProperties;
+    private TcpMockerProperties tcpMockerProperties;
 
     private SimpleTcpClient tcpClient;
 
     @BeforeMethod
     public void setup() throws Exception {
-        tcpClient = new SimpleTcpClient("localhost", mockServerProperties.getPort());
+        tcpClient = new SimpleTcpClient("localhost", tcpMockerProperties.getListenPort());
     }
 
     @AfterMethod

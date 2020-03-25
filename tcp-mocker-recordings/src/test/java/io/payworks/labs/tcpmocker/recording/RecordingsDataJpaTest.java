@@ -45,11 +45,6 @@ public class RecordingsDataJpaTest extends AbstractTestNGSpringContextTests {
         final byte[] request = RandomUtils.nextBytes(100);
         final byte[] reply = RandomUtils.nextBytes(50);
 
-        try {
-            Thread.sleep(100);
-        } catch (final InterruptedException ignored) {
-        }
-
         return RecordingEntity.builder()
                 .withRequest(request)
                 .withReply(reply)

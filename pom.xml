@@ -93,15 +93,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependencies -->
-        <spring-boot.version>2.1.11.RELEASE</spring-boot.version>
+        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
         <springfox.version>2.9.2</springfox.version>
-        <testng.version>6.14.3</testng.version>
+        <guava.version>28.2-jre</guava.version>
+        <commons-lang3.version>3.9</commons-lang3.version>
+        <commons-io.version>2.6</commons-io.version>
+        <groovy.version>2.5.10</groovy.version>
+        <testng.version>7.1.0</testng.version>
         <hamcrest.version>2.2</hamcrest.version>
         <hamcrest-optional.version>1.1.5</hamcrest-optional.version>
-        <guava.version>28.1-jre</guava.version>
-        <apache-commons.version>3.9</apache-commons.version>
-        <commons-io.version>2.6</commons-io.version>
-        <groovy.version>2.5.8</groovy.version>
         <testcontainers.version>1.12.4</testcontainers.version>
 
         <!-- Plugins -->
@@ -114,12 +114,12 @@
         <maven-deploy-plugin.version>3.0.0-M1</maven-deploy-plugin.version>
         <maven-enforcer-plugin.version>3.0.0-M3</maven-enforcer-plugin.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
+        <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <guava-beta-checker.version>1.0</guava-beta-checker.version>
         <google-errorprone.version>2.3.4</google-errorprone.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <sortpom-maven-plugin.version>2.10.0</sortpom-maven-plugin.version>
-        <go-offline-maven-plugin.version>1.2.4</go-offline-maven-plugin.version>
+        <sortpom-maven-plugin.version>2.11.0</sortpom-maven-plugin.version>
+        <go-offline-maven-plugin.version>1.2.5</go-offline-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -182,7 +182,7 @@
             </dependency>
             <dependency>
                 <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest-core</artifactId>
+                <artifactId>hamcrest</artifactId>
                 <version>${hamcrest.version}</version>
             </dependency>
             <dependency>
@@ -198,7 +198,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>${apache-commons.version}</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
@@ -260,7 +260,7 @@
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
+            <artifactId>hamcrest</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
