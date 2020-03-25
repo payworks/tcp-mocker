@@ -1,5 +1,6 @@
 package io.payworks.labs.tcpmocker.configuration;
 
+import io.payworks.labs.tcpmocker.NettyTcpServer;
 import io.payworks.labs.tcpmocker.NettyTcpServerBuilder;
 import io.payworks.labs.tcpmocker.TcpServer;
 import io.payworks.labs.tcpmocker.datahandler.CompositeDataHandler;
@@ -33,19 +34,18 @@ public class TcpMockerAppConfiguration {
     }
 
     @Bean
-    public TcpServer tcpServer(final DataHandlerDispatcherFactory dataHandlerDispatcherFactory) {
-        final TcpServerFactory serverFactory = new TcpServerFactory(
-                new NettyTcpServerBuilder()
-                        .withDataHandlerDispatcherFactory(dataHandlerDispatcherFactory),
-                dataHandlersLoader());
-
-        return serverFactory.createTcpServer(properties.getListenPort());
+    public DataHandlerDispatcherFactory dataHandlerDispatcherFactory(final RecordingsRepository recordingsRepository) {
+        return dataHandlers ->
+                new LoggingDataHandler(new RecordingDataHandler(recordingsRepository, new CompositeDataHandler(dataHandlers)));
     }
 
     @Bean
-    public DataHandlerDispatcherFactory dataHandlerDispatcherFactory(final RecordingsRepository recordingsRepository) {
-        return dataHandlers ->
-                new LoggingDataHandler(
-                        new RecordingDataHandler(recordingsRepository, new CompositeDataHandler(dataHandlers)));
+    public TcpServer tcpServer(final DataHandlerDispatcherFactory dataHandlerDispatcherFactory) {
+        final NettyTcpServerBuilder tcpServerBuilder = NettyTcpServer.builder()
+                .withDataHandlerDispatcherFactory(dataHandlerDispatcherFactory);
+        
+        final TcpServerFactory tcpServerFactory = new TcpServerFactory(tcpServerBuilder, dataHandlersLoader());
+
+        return tcpServerFactory.createTcpServer(properties.getListenPort());
     }
 }

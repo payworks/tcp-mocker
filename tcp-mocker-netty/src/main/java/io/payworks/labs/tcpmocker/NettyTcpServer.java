@@ -22,4 +22,8 @@ public class NettyTcpServer extends AbstractTcpServer {
             Thread.currentThread().interrupt();
         }
     }
+    
+    public static NettyTcpServerBuilder builder() {
+        return new NettyTcpServerBuilder();
+    }
 }
