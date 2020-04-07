@@ -18,24 +18,28 @@ import java.util.stream.Collectors;
 
 public final class DefaultDataHandlersLoader implements DataHandlersLoader {
 
-    public static final ImmutableMap<Pattern, DataHandlerFactory> DATA_HANDLER_FACTORIES = ImmutableMap.of(
-            Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-            Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-            Pattern.compile(".+\\.grdh"), new GroovyDataHandlerFactory()
-    );
     public static final String DEFAULT_MAPPINGS_PATH = "classpath:/tcp-mappings/";
 
     private final ResourceLoader resourceLoader;
 
     private String mappingsPath = DEFAULT_MAPPINGS_PATH;
-    private Map<Pattern, DataHandlerFactory> dataHandlerFactories = DATA_HANDLER_FACTORIES;
+    private Map<Pattern, DataHandlerFactory> dataHandlerFactories;
 
-    public DefaultDataHandlersLoader(final ResourceLoader resourceLoader) {
+    public DefaultDataHandlersLoader(final ResourceLoader resourceLoader,
+                                     final Map<Pattern, DataHandlerFactory> dataHandlerFactories) {
         this.resourceLoader = resourceLoader;
+        this.dataHandlerFactories = Map.copyOf(dataHandlerFactories);
     }
 
     public DefaultDataHandlersLoader() {
-        this(new DefaultResourceLoader());
+        this(new DefaultResourceLoader(), getDefaultDataHandlerFactories());
+    }
+
+    public static Map<Pattern, DataHandlerFactory> getDefaultDataHandlerFactories() {
+        return Map.of(
+                Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()),
+                Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()),
+                Pattern.compile(".+\\.grdh"), new GroovyDataHandlerFactory());
     }
 
     public void setMappingsPath(final String mappingsPath) {
@@ -52,9 +56,7 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
 
         final Map<String, DataHandler> dataHandlers = new LinkedHashMap<>();
 
-        dirList.forEach(filePath -> {
-            dataHandlers.putAll(filePathDataHandlers(filter, filePath));
-        });
+        dirList.forEach(filePath -> dataHandlers.putAll(filePathDataHandlers(filter, filePath)));
 
         return Collections.unmodifiableMap(dataHandlers);
     }
