@@ -44,11 +44,6 @@ public class NettyTcpServerBuilder extends DispatchingDataHandlerServerBuilder<N
         final EventLoopGroup acceptGroup = new NioEventLoopGroup(acceptThreads, acceptThreadFactory);
         final EventLoopGroup connectGroup = new NioEventLoopGroup(connectThreads, connectThreadFactory);
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            acceptGroup.shutdownGracefully();
-            connectGroup.shutdownGracefully();
-        }));
-
         final ServerBootstrap bootstrap = new ServerBootstrap()
                 .group(acceptGroup, connectGroup)
                 .channel(NioServerSocketChannel.class)
@@ -61,7 +56,11 @@ public class NettyTcpServerBuilder extends DispatchingDataHandlerServerBuilder<N
                     }
                 });
 
-        return new NettyTcpServer(bootstrap.bind(getPort()));
+        final NettyTcpServer nettyTcpServer = new NettyTcpServer(bootstrap.bind(getPort()), acceptGroup, connectGroup);
+
+        Runtime.getRuntime().addShutdownHook(new Thread(nettyTcpServer::close));
+
+        return nettyTcpServer;
     }
 
     @Override

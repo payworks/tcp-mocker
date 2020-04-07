@@ -6,7 +6,6 @@ import io.payworks.labs.tcpmocker.datahandler.DataHandlerDispatcherFactory;
 import io.payworks.labs.tcpmocker.datahandler.LoggingDataHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -18,6 +17,9 @@ import java.util.Optional;
 import java.util.Random;
 
 import static com.google.common.io.BaseEncoding.base16;
+import static org.awaitility.Awaitility.await;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class NettyTcpServerTest {
 
@@ -35,13 +37,11 @@ public class NettyTcpServerTest {
 
     @Test
     public void testEchoServer() throws Exception {
-        try (final NettyTcpServer server = givenNettyTcpServerWithEchoDataHandler()) {
+        try (final NettyTcpServer server = givenNettyTcpServerWithEchoDataHandler();
+             final Socket client = new Socket(LOOPBACK, server.getPort())) {
             final byte[] data = new byte[DATA_SIZE];
             RANDOM.nextBytes(data);
-
-            try (final Socket client = new Socket(LOOPBACK, server.getPort())) {
-                sendAndReceive(client, data, data);
-            }
+            sendReceiveAndVerify(client, data, data);
         }
     }
 
@@ -61,10 +61,9 @@ public class NettyTcpServerTest {
 
     @Test
     public void testRequestResponseServer() throws Exception {
-        try (final NettyTcpServer server = givenNettyTcpServerWithTestRequestDataHandler()) {
-            try (final Socket client = new Socket(LOOPBACK, server.getPort())) {
-                sendAndReceive(client, TEST_REQUEST, TEST_RESPONSE);
-            }
+        try (final NettyTcpServer server = givenNettyTcpServerWithTestRequestDataHandler();
+             final Socket client = new Socket(LOOPBACK, server.getPort())) {
+            sendReceiveAndVerify(client, TEST_REQUEST, TEST_RESPONSE);
         }
     }
 
@@ -72,31 +71,36 @@ public class NettyTcpServerTest {
         return givenNettyTcpServerBuilderWith(new TestRequestDataHandler()).build();
     }
 
-    private void sendAndReceive(Socket client, byte[] data, byte[] expected) throws IOException {
+    private void sendReceiveAndVerify(final Socket client, final byte[] data, final byte[] expected) throws IOException {
+        final byte[] buffer = sendAndReceive(client, data);
+        assertThat(Arrays.copyOf(buffer, expected.length), equalTo(expected));
+    }
+
+    private byte[] sendAndReceive(final Socket client, final byte[] data) throws IOException {
+        final byte[] buffer;
         try (final InputStream clientInputStream = client.getInputStream();
              final OutputStream clientOutputStream = client.getOutputStream()) {
             clientOutputStream.write(data);
 
-            final byte[] buffer = new byte[BUFFER_SIZE];
+            buffer = new byte[BUFFER_SIZE];
             final int received = clientInputStream.read(buffer);
 
             logger.trace("Sent: {}", data);
             logger.trace("Received ({}): {}", received, buffer);
-
-            Assert.assertEquals(Arrays.copyOf(buffer, expected.length), expected);
         }
+        return buffer;
     }
 
     private static final class EchoDataHandler implements DataHandler {
         @Override
-        public Optional<byte[]> handle(byte[] data) {
+        public Optional<byte[]> handle(final byte[] data) {
             return Optional.of(data);
         }
     }
 
     private static final class TestRequestDataHandler implements DataHandler {
         @Override
-        public Optional<byte[]> handle(byte[] data) {
+        public Optional<byte[]> handle(final byte[] data) {
             if (Arrays.equals(TEST_REQUEST, Arrays.copyOf(data, TEST_REQUEST.length))) {
                 return Optional.of(TEST_RESPONSE);
             } else {
@@ -109,5 +113,18 @@ public class NettyTcpServerTest {
         return collection ->
                 new LoggingDataHandler(
                         new CompositeDataHandler(collection));
+    }
+
+    @Test
+    public void testCloseServer() throws Exception {
+        try (final NettyTcpServer server = givenNettyTcpServerWithTestRequestDataHandler();
+             final Socket client = new Socket(LOOPBACK, server.getPort())) {
+
+            await().until(client::isConnected);
+
+            server.close();
+
+            await().until(() -> sendAndReceive(client, TEST_REQUEST), λ -> client.isClosed());
+        }
     }
 }
