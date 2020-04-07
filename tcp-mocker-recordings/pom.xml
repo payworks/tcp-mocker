@@ -17,7 +17,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <!-- TODO: change to spring-boot-starter-data-jdbc -->
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>

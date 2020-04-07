@@ -1,10 +1,10 @@
-mockserver:
-  port: 10001
-  tcp-mappings-path: file:${user.home}/.tcp-mocker/tcp-mappings
+tcp-mocker:
+  listen-port: 10001
+  mappings-path: file:${user.home}/.tcp-mocker/tcp-mappings
 
 spring:
   main:
-    web-application-type: servlet # TODO: change to reactive
+    web-application-type: servlet
   jpa:
     open-in-view: false
   h2:

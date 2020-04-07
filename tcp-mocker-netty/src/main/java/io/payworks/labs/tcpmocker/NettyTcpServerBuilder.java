@@ -16,15 +16,21 @@ public class NettyTcpServerBuilder extends DispatchingDataHandlerServerBuilder<N
     private final int connectThreads;
     private final int queueSize;
 
-    public NettyTcpServerBuilder(final int acceptThreads,
-                                 final int connectThreads,
-                                 final int queueSize) {
+    public static NettyTcpServerBuilder create(final int acceptThreads,
+                                               final int connectThreads,
+                                               final int queueSize) {
+        return new NettyTcpServerBuilder(acceptThreads, connectThreads, queueSize);
+    }
+
+    NettyTcpServerBuilder(final int acceptThreads,
+                          final int connectThreads,
+                          final int queueSize) {
         this.acceptThreads = acceptThreads;
         this.connectThreads = connectThreads;
         this.queueSize = queueSize;
     }
 
-    public NettyTcpServerBuilder() {
+    NettyTcpServerBuilder() {
         this(1, 5, 100);
     }
 

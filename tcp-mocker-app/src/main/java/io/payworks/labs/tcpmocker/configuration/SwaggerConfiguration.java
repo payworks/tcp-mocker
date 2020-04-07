@@ -1,6 +1,6 @@
 package io.payworks.labs.tcpmocker.configuration;
 
-import io.payworks.labs.tcpmocker.MockServerApp;
+import io.payworks.labs.tcpmocker.TcpMockerApp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class SwaggerConfiguration {
     public Docket api(final ServletContext servletContext) {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(MockServerApp.class.getPackage().getName()))
+                .apis(RequestHandlerSelectors.basePackage(TcpMockerApp.class.getPackage().getName()))
                 .paths(PathSelectors.any())
                 .build()
                 .directModelSubstitute(URI.class, String.class)

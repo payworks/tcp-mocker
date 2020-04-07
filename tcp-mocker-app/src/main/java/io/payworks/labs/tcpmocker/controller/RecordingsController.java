@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/recordings", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "/recordings", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RecordingsController {
 
     private final RecordingsService recordingsService;
