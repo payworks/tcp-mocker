@@ -98,11 +98,13 @@
         <guava.version>28.2-jre</guava.version>
         <commons-lang3.version>3.10</commons-lang3.version>
         <commons-io.version>2.6</commons-io.version>
+        <netty.version>4.1.48.Final</netty.version>
         <groovy.version>3.0.2</groovy.version>
         <testng.version>7.1.0</testng.version>
         <hamcrest.version>2.2</hamcrest.version>
         <hamcrest-optional.version>1.1.5</hamcrest-optional.version>
         <testcontainers.version>1.13.0</testcontainers.version>
+        <awaitility.version>4.0.2</awaitility.version>
 
         <!-- Plugins -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -120,17 +122,10 @@
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <sortpom-maven-plugin.version>2.11.0</sortpom-maven-plugin.version>
         <go-offline-maven-plugin.version>1.2.5</go-offline-maven-plugin.version>
-        <awaitility.version>4.0.2</awaitility.version>
-        <netty.version>4.1.48.Final</netty.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.awaitility</groupId>
-                <artifactId>awaitility</artifactId>
-                <version>${awaitility.version}</version>
-            </dependency>
             <dependency>
                 <groupId>io.payworks.labs.tcpmocker</groupId>
                 <artifactId>tcp-mocker-app</artifactId>
@@ -183,21 +178,6 @@
                 <version>${springfox.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.testng</groupId>
-                <artifactId>testng</artifactId>
-                <version>${testng.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hamcrest</groupId>
-                <artifactId>hamcrest</artifactId>
-                <version>${hamcrest.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.spotify</groupId>
-                <artifactId>hamcrest-optional</artifactId>
-                <version>${hamcrest-optional.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
@@ -217,6 +197,31 @@
                 <artifactId>groovy-all</artifactId>
                 <version>${groovy.version}</version>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.testng</groupId>
+                <artifactId>testng</artifactId>
+                <version>${testng.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hamcrest</groupId>
+                <artifactId>hamcrest</artifactId>
+                <version>${hamcrest.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spotify</groupId>
+                <artifactId>hamcrest-optional</artifactId>
+                <version>${hamcrest-optional.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${testcontainers.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>${awaitility.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -239,11 +244,6 @@
                         <artifactId>junit</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers</artifactId>
-                <version>${testcontainers.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>

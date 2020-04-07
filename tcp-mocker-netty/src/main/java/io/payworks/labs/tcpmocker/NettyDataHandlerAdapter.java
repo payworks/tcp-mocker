@@ -29,13 +29,13 @@ public class NettyDataHandlerAdapter extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(final ChannelHandlerContext ctx, Object msg) {
-        alloc(ctx);
+        bootstrap(ctx);
 
         if (msg instanceof ByteBuf) {
-            readBytes((ByteBuf) msg);
+            readMsgToReadBuf((ByteBuf) msg);
 
-            if (handle()) {
-                writeBytes(ctx);
+            if (handleToWriteBuf()) {
+                flushWriteBuf(ctx);
             }
         } else {
             throw new UnsupportedOperationException(String.format("Unsupported Message: %s", msg.getClass()));
@@ -53,31 +53,41 @@ public class NettyDataHandlerAdapter extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    private void alloc(ChannelHandlerContext ctx) {
-        if (readBuf == null) readBuf = ctx.alloc().buffer();
-        if (writeBuf == null) writeBuf = ctx.alloc().buffer();
+    private void bootstrap(ChannelHandlerContext ctx) {
+        if (readBuf == null) {
+            readBuf = ctx.alloc().buffer();
+        }
+        
+        if (writeBuf == null) {
+            writeBuf = ctx.alloc().buffer();
+        }
     }
 
-    private void readBytes(ByteBuf byteBuf) {
+    private void readMsgToReadBuf(ByteBuf byteBuf) {
         readBuf.writeBytes(byteBuf);
         byteBuf.release();
     }
 
-    private boolean handle() {
-        Optional<byte[]> handleResult = dataHandler.handle(getBytes(readBuf));
+    private boolean handleToWriteBuf() {
+        Optional<byte[]> handleResult = tryHandle();
 
-        handleResult
-                .ifPresent(bytes -> {
-                    writeBuf.writeBytes(bytes);
-
-                    readBuf.release();
-                    readBuf = null;
-                });
-
-        return handleResult.isPresent();
+        if (handleResult.isEmpty()) {
+            return false;
+        } else {
+            readBuf.release();
+            readBuf = null;
+            
+            writeBuf.writeBytes(handleResult.get());
+            
+            return true;
+        }
     }
 
-    private static byte[] getBytes(ByteBuf byteBuf) {
+    private Optional<byte[]> tryHandle() {
+        return dataHandler.handle(toByteArray(readBuf));
+    }
+
+    private static byte[] toByteArray(ByteBuf byteBuf) {
         if (byteBuf.hasArray()) {
             return byteBuf.array();
         } else {
@@ -87,19 +97,20 @@ public class NettyDataHandlerAdapter extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private void writeBytes(ChannelHandlerContext ctx) {
-        if (writeBuf.writerIndex() == 0) {
-            writeBuf = null;
-            ctx.close();
-        }
-        else {
-            ctx.write(writeBuf)
+    private void flushWriteBuf(ChannelHandlerContext ctx) {
+        final ByteBuf writeBufRef = writeBuf;
+        writeBuf = null;
+
+        if (writeBufRef.writerIndex() != 0) {
+            ctx.write(writeBufRef)
                     .addListener(f -> {
                         if (!f.isSuccess()) {
                             logger.error("Unexpected Error!", f.cause());
                         }
                     });
-            writeBuf = null;
+        } else {
+            writeBufRef.release();
+            ctx.close();
         }
     }
 }
