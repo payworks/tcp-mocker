@@ -36,10 +36,30 @@ public final class DefaultDataHandlersLoader implements DataHandlersLoader {
     }
 
     public static Map<Pattern, DataHandlerFactory> getDefaultDataHandlerFactories() {
-        return Map.of(
-                Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-                Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()),
-                Pattern.compile(".+\\.grdh"), new GroovyDataHandlerFactory());
+        final ImmutableMap.Builder<Pattern, DataHandlerFactory> builder = ImmutableMap.builder();
+
+        if (classIsPresent("com.fasterxml.jackson.databind.ObjectMapper")) {
+            builder.put(Pattern.compile(".+\\.json"), new JsonDataHandlerFactory(new DefaultDataHandlerModelFactory()));
+
+            if (classIsPresent("com.fasterxml.jackson.dataformat.yaml.YAMLFactory")) {
+                builder.put(Pattern.compile(".+\\.ya?ml"), new YamlDataHandlerFactory(new DefaultDataHandlerModelFactory()));
+            }
+        }
+
+        if (classIsPresent("groovy.lang.GroovyShell")) {
+            builder.put(Pattern.compile(".+\\.grdh"), new GroovyDataHandlerFactory());
+        }
+
+        return builder.build();
+    }
+
+    private static boolean classIsPresent(final String className) {
+        try {
+            Class.forName(className, false, DefaultDataHandlersLoader.class.getClassLoader());
+            return true;
+        } catch (final ClassNotFoundException e) {
+            return false;
+        }
     }
 
     public void setMappingsPath(final String mappingsPath) {
