@@ -13,7 +13,7 @@ public class ResponseDelayResource {
     private ResponseDelayResource() {
     }
 
-    public ResponseDelayResource(Duration duration) {
+    public ResponseDelayResource(final Duration duration) {
         this.duration = duration;
     }
 
