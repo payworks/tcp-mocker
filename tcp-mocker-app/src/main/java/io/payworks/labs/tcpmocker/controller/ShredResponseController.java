@@ -1,13 +1,10 @@
 package io.payworks.labs.tcpmocker.controller;
 
-import io.payworks.labs.tcpmocker.controller.resources.ResponseDelayResource;
-import io.payworks.labs.tcpmocker.controller.resources.ResponseShreddingResource;
+import io.payworks.labs.tcpmocker.controller.model.ResponseShreddingModel;
 import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/responseshredding", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -19,13 +16,13 @@ public class ShredResponseController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseShreddingResource> getResponseShredding() {
-        return ResponseEntity.ok(new ResponseShreddingResource(properties.isShredResponses()));
+    public ResponseEntity<ResponseShreddingModel> getResponseShredding() {
+        return ResponseEntity.ok(new ResponseShreddingModel(properties.isShredResponses()));
     }
 
     @PostMapping
-    public ResponseEntity<ResponseShreddingResource> setResponseShredding(@RequestBody final ResponseShreddingResource responseShredding) {
+    public ResponseEntity<ResponseShreddingModel> setResponseShredding(@RequestBody final ResponseShreddingModel responseShredding) {
         properties.setShredResponses(responseShredding.isEnabled());
-        return ResponseEntity.ok(new ResponseShreddingResource(properties.isShredResponses()));
+        return ResponseEntity.ok(new ResponseShreddingModel(properties.isShredResponses()));
     }
 }

@@ -1,7 +1,7 @@
 package io.payworks.labs.tcpmocker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.payworks.labs.tcpmocker.controller.resources.ResponseDelayResource;
+import io.payworks.labs.tcpmocker.controller.model.ResponseDelayModel;
 import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -50,7 +50,7 @@ public class DelayResponseControllerTest extends AbstractTestNGSpringContextTest
     @Test
     public void setDelayPopulatesValueToPropertiesAndReturnItsValue() throws Exception {
         final var givenDuration = Duration.ofSeconds(20L);
-        final var givenResponseDelay = new ResponseDelayResource(givenDuration);
+        final var givenResponseDelay = new ResponseDelayModel(givenDuration);
         given(properties.getResponseDelay()).willReturn(givenDuration);
 
         mvc.perform(
@@ -68,7 +68,7 @@ public class DelayResponseControllerTest extends AbstractTestNGSpringContextTest
     @Test
     public void setDelayDoesNotAcceptNegativeValues() throws Exception {
         final var givenDuration = Duration.ofSeconds(-1L);
-        final var givenResponseDelay = new ResponseDelayResource(givenDuration);
+        final var givenResponseDelay = new ResponseDelayModel(givenDuration);
         given(properties.getResponseDelay()).willReturn(givenDuration);
 
         mvc.perform(

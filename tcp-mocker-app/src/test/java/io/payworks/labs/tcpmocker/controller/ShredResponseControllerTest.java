@@ -1,8 +1,7 @@
 package io.payworks.labs.tcpmocker.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.payworks.labs.tcpmocker.controller.resources.ResponseDelayResource;
-import io.payworks.labs.tcpmocker.controller.resources.ResponseShreddingResource;
+import io.payworks.labs.tcpmocker.controller.model.ResponseShreddingModel;
 import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,8 +12,6 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -59,7 +56,7 @@ public class ShredResponseControllerTest extends AbstractTestNGSpringContextTest
     @Test
     public void setResponseShreddingPopulatesValueToPropertiesAndReturnsItsValue() throws Exception {
         final var givenShredResponses = true;
-        final var givenResponseShredding = new ResponseShreddingResource(givenShredResponses);
+        final var givenResponseShredding = new ResponseShreddingModel(givenShredResponses);
 
         given(properties.isShredResponses()).willReturn(givenShredResponses);
 

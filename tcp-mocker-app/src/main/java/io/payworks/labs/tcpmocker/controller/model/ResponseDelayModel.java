@@ -1,19 +1,19 @@
-package io.payworks.labs.tcpmocker.controller.resources;
+package io.payworks.labs.tcpmocker.controller.model;
 
 import org.hibernate.validator.constraints.time.DurationMin;
 
 import javax.validation.constraints.NotNull;
 import java.time.Duration;
 
-public class ResponseDelayResource {
+public class ResponseDelayModel {
     @NotNull
     @DurationMin(millis = 0)
     private Duration duration;
 
-    private ResponseDelayResource() {
+    private ResponseDelayModel() {
     }
 
-    public ResponseDelayResource(final Duration duration) {
+    public ResponseDelayModel(final Duration duration) {
         this.duration = duration;
     }
 

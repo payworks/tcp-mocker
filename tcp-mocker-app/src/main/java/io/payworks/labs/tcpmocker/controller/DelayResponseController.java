@@ -1,6 +1,6 @@
 package io.payworks.labs.tcpmocker.controller;
 
-import io.payworks.labs.tcpmocker.controller.resources.ResponseDelayResource;
+import io.payworks.labs.tcpmocker.controller.model.ResponseDelayModel;
 import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +18,13 @@ public class DelayResponseController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDelayResource> getResponseDelay() {
-        return ResponseEntity.ok(new ResponseDelayResource(properties.getResponseDelay()));
+    public ResponseEntity<ResponseDelayModel> getResponseDelay() {
+        return ResponseEntity.ok(new ResponseDelayModel(properties.getResponseDelay()));
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDelayResource> setResponseDelay(@RequestBody @Valid final ResponseDelayResource responseDelay) {
+    public ResponseEntity<ResponseDelayModel> setResponseDelay(@RequestBody @Valid final ResponseDelayModel responseDelay) {
         properties.setResponseDelay(responseDelay.getDuration());
-        return ResponseEntity.ok(new ResponseDelayResource(properties.getResponseDelay()));
+        return ResponseEntity.ok(new ResponseDelayModel(properties.getResponseDelay()));
     }
 }
