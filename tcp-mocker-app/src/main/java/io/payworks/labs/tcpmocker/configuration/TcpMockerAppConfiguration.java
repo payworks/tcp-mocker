@@ -3,9 +3,7 @@ package io.payworks.labs.tcpmocker.configuration;
 import io.payworks.labs.tcpmocker.NettyTcpServer;
 import io.payworks.labs.tcpmocker.NettyTcpServerBuilder;
 import io.payworks.labs.tcpmocker.TcpServer;
-import io.payworks.labs.tcpmocker.datahandler.CompositeDataHandler;
-import io.payworks.labs.tcpmocker.datahandler.DataHandlerDispatcherFactory;
-import io.payworks.labs.tcpmocker.datahandler.LoggingDataHandler;
+import io.payworks.labs.tcpmocker.datahandler.*;
 import io.payworks.labs.tcpmocker.properties.TcpMockerProperties;
 import io.payworks.labs.tcpmocker.recording.RecordingDataHandler;
 import io.payworks.labs.tcpmocker.recording.RecordingsRepository;
@@ -36,14 +34,21 @@ public class TcpMockerAppConfiguration {
     @Bean
     public DataHandlerDispatcherFactory dataHandlerDispatcherFactory(final RecordingsRepository recordingsRepository) {
         return dataHandlers ->
-                new LoggingDataHandler(new RecordingDataHandler(recordingsRepository, new CompositeDataHandler(dataHandlers)));
+                new ResponseShredderDataHandler(
+                        properties::isShredResponses,
+                        new DelayedResponseDataHandler(
+                                properties::getResponseDelay,
+                                new LoggingDataHandler(
+                                        new RecordingDataHandler(
+                                                recordingsRepository,
+                                                new CompositeDataHandler(dataHandlers)))));
     }
 
     @Bean
     public TcpServer tcpServer(final DataHandlerDispatcherFactory dataHandlerDispatcherFactory) {
         final NettyTcpServerBuilder tcpServerBuilder = NettyTcpServer.builder()
                 .withDataHandlerDispatcherFactory(dataHandlerDispatcherFactory);
-        
+
         final TcpServerFactory tcpServerFactory = new TcpServerFactory(tcpServerBuilder, dataHandlersLoader());
 
         return tcpServerFactory.createTcpServer(properties.getListenPort());
