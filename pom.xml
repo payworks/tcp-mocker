@@ -93,18 +93,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependencies -->
-        <spring-boot.version>2.2.5.RELEASE</spring-boot.version>
+        <spring-boot.version>2.4.0</spring-boot.version>
         <springfox.version>2.9.2</springfox.version>
-        <guava.version>28.2-jre</guava.version>
-        <commons-lang3.version>3.10</commons-lang3.version>
-        <commons-io.version>2.6</commons-io.version>
-        <netty.version>4.1.48.Final</netty.version>
-        <groovy.version>3.0.2</groovy.version>
-        <testng.version>7.1.0</testng.version>
+        <guava.version>30.0-jre</guava.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-io.version>2.8.0</commons-io.version>
+        <netty.version>4.1.55.Final</netty.version>
+        <groovy.version>3.0.7</groovy.version>
+        <testng.version>7.3.0</testng.version>
         <hamcrest.version>2.2</hamcrest.version>
-        <hamcrest-optional.version>1.1.5</hamcrest-optional.version>
-        <testcontainers.version>1.13.0</testcontainers.version>
-        <awaitility.version>4.0.2</awaitility.version>
+        <hamcrest-optional.version>1.2.0</hamcrest-optional.version>
+        <testcontainers.version>1.15.0</testcontainers.version>
+        <awaitility.version>4.0.3</awaitility.version>
 
         <!-- Plugins -->
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
@@ -118,10 +118,10 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <maven-dependency-plugin.version>3.1.2</maven-dependency-plugin.version>
         <guava-beta-checker.version>1.0</guava-beta-checker.version>
-        <google-errorprone.version>2.3.4</google-errorprone.version>
+        <google-errorprone.version>2.4.0</google-errorprone.version>
         <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <sortpom-maven-plugin.version>2.11.0</sortpom-maven-plugin.version>
-        <go-offline-maven-plugin.version>1.2.5</go-offline-maven-plugin.version>
+        <sortpom-maven-plugin.version>2.12.0</sortpom-maven-plugin.version>
+        <go-offline-maven-plugin.version>1.2.7</go-offline-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -292,14 +292,14 @@
     <repositories>
         <repository>
             <id>maven-central</id>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
         <pluginRepository>
             <id>maven-central</id>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </pluginRepository>
     </pluginRepositories>
 
