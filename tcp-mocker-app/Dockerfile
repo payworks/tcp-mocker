@@ -26,4 +26,4 @@ EXPOSE $TCPLISTENPORT $WEBAPP_PORT
 
 VOLUME ["${TCPMAPPINGSPATH}"]
 
-CMD sh -c "java ${JAVA_OPTIONS} -cp app:app/lib/* ${JAVA_MAIN}"
+CMD exec java "${JAVA_OPTIONS}" -cp app:app/lib/* "${JAVA_MAIN}"
