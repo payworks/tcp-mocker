@@ -7,8 +7,7 @@
 ### Build
 
 ###### Supported Java Versions:
-* [Java 11](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot)
-* Java 12/13/14: https://github.com/google/error-prone/issues/1106
+* [Java 11 LTS](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot)
 
 ##### Using Maven
 
