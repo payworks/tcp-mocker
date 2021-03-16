@@ -1,6 +1,6 @@
 FROM openjdk:11-jre-slim
 
-MAINTAINER Andrey Saksonov <andrey.saksonov@payworks.com>
+MAINTAINER Andrey Saksonov <andrey.saksonov@visa.com>
 
 ARG TCPLISTENPORT=10001
 ARG TCPMAPPINGSPATH=/var/lib/tcp-mocker/tcp-mappings
